@@ -7,9 +7,6 @@ public class Splash extends JDialog {
 
     private JProgressBar barra;
     private JLabel l2;
-    private JButton play;
-    private Timer temporizador;
-    private boolean parpadeo;
 
     //PROPIEDADES DIALOOGO
     public Splash() {
@@ -77,6 +74,61 @@ public class Splash extends JDialog {
         }
     }
 
+    public class InstruccionesVentana extends JFrame {
+
+        public InstruccionesVentana() {
+            super("Controls"); // título de la ventana
+            setSize(600, 600); // tamaño de la ventana
+
+            setLocationRelativeTo(null);
+            getContentPane().setLayout(null);
+            setUndecorated(true);
+
+            JLabel label = new JLabel("Aquí van las instrucciones");
+            label.setFont(new Font("Tahoma", Font.PLAIN,18));
+            label.setBounds(50,50,300,100);
+            add(label);
+
+            JButton atras = new JButton("Regresar al menú");
+            atras.setFont(new Font("Tahoma", Font.PLAIN,18));
+            atras.setBounds(200,310,200,200);
+            atras.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    dispose(); // cerrar la ventana actual
+                }
+            });
+
+            add(atras);
+        }
+    }
+
+    public class InformacionVentana extends JFrame {
+
+        public InformacionVentana() {
+            super("About us"); // título de la ventana
+            setSize(600, 600); // tamaño de la ventana
+
+            setLocationRelativeTo(null);
+            getContentPane().setLayout(null);
+            setUndecorated(true);
+
+            JLabel label = new JLabel("Aquí va la información");
+            label.setFont(new Font("Tahoma", Font.PLAIN,18));
+            label.setBounds(50,50,300,100);
+            add(label);
+
+            JButton atras = new JButton("Regresar al menú");
+            atras.setFont(new Font("Tahoma", Font.PLAIN,18));
+            atras.setBounds(200,310,200,200);
+            atras.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    dispose(); // cerrar la ventana actual
+                }
+            });
+
+            add(atras);
+        }
+    }
 
     private void inicioHilo() {
         Thread hilo = new Thread(new Runnable() {
@@ -85,6 +137,7 @@ public class Splash extends JDialog {
 
             public void run() {
                 try {
+
                     while (x <= 100) {
                         barra.setValue(x);
                         x++;
@@ -98,6 +151,8 @@ public class Splash extends JDialog {
                             l2.setText(texto);
                         }
                     }
+
+
 
                     ParpadeoBoton play = new ParpadeoBoton("PLAY     >");
                     play.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -138,13 +193,15 @@ public class Splash extends JDialog {
 
                     instrucciones.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
-                            //dispose();
+                            InstruccionesVentana v1 = new InstruccionesVentana();
+                            v1.setVisible(true);
                         }
                     });
 
                     equipo.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
-                           // dispose();
+                            InformacionVentana v1 = new InformacionVentana();
+                            v1.setVisible(true);
                         }
                     });
 

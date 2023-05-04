@@ -1,11 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Splash extends JDialog {
 
-    private JLabel porcentaje;
     private JProgressBar barra;
     private JLabel l2;
+    private JButton play;
+    private Timer temporizador;
+    private boolean parpadeo;
 
     //PROPIEDADES DIALOOGO
     public Splash() {
@@ -30,21 +34,11 @@ public class Splash extends JDialog {
         etiqueta.setSize(600, 600);
         etiqueta.setLocation(0, 0);
 
-        JLabel l1 = new JLabel();
-        l1.setFont(new Font("Inter", Font.PLAIN,18));
-        l1.setBounds(49,11,147,32);
-        getContentPane().add(l1);
-
         barra = new JProgressBar();
         barra.setBounds(154,397,294,22);
         barra.setOpaque(true);
         barra.setForeground(Color.decode("#3E4532"));
         getContentPane().add(barra);
-
-        porcentaje = new JLabel("0%");
-        porcentaje.setFont(new Font("Inter", Font.PLAIN,18));
-        porcentaje.setBounds(280,355,46,14);
-        getContentPane().add(porcentaje);
 
         l2 = new JLabel();
         l2.setFont(new Font("Tahoma", Font.PLAIN,18));
@@ -54,43 +48,119 @@ public class Splash extends JDialog {
         getContentPane().add(etiqueta);
     }
 
-    private void inicioHilo(){
-        Thread hilo = new Thread(new Runnable(){
+    public class ParpadeoBoton extends JButton implements ActionListener {
+        private boolean parpadeo;
 
+        public ParpadeoBoton(String text) {
+            super(text);
+            parpadeo = false;
+            setBackground(Color.RED);
+            setForeground(Color.WHITE);
+            setFocusPainted(false);
+            addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("Botón presionado!");
+                }
+            });
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            if (parpadeo) {
+                setBackground(Color.RED);
+                setForeground(Color.WHITE);
+                parpadeo = false;
+            } else {
+                setBackground(Color.WHITE);
+                setForeground(Color.BLACK);
+                parpadeo = true;
+            }
+        }
+    }
+
+
+    private void inicioHilo() {
+        Thread hilo = new Thread(new Runnable() {
             int x = 0;
             String texto = " ";
 
-            //ACCION DE CARGA
-            public void run(){
-                try{
-                    while(x<=100){
+            public void run() {
+                try {
+                    while (x <= 100) {
                         barra.setValue(x);
-                        porcentaje.setText(x+"%");
                         x++;
-                        Thread.sleep(20);
+                        Thread.sleep(10);
 
-                        //MENSAJES DE CARGA
-                        if(x==5){
-                            texto="Cargando...";
+                        if (x == 5) {
+                            texto = "Cargando...";
                             l2.setText(texto);
-                        } else if (x==15){
-                            texto="Iniciando...";
+                        } else if (x == 50) {
+                            texto = "Iniciando...";
                             l2.setText(texto);
                         }
                     }
 
-                    //CIERRA SPLASH, ABRE VENTANA DE ACCIONES
-                    dispose();
+                    ParpadeoBoton play = new ParpadeoBoton("PLAY     >");
+                    play.setFont(new Font("Tahoma", Font.PLAIN, 18));
+                    play.setBounds(240, 420, 140, 25);
 
-                    Ventana v1 = new Ventana();
-                    v1.setVisible(true);
+                    ParpadeoBoton instrucciones = new ParpadeoBoton("CONTROLS");
+                    instrucciones.setFont(new Font("Tahoma", Font.PLAIN, 18));
+                    instrucciones.setBounds(240, 455, 140, 25);
 
-                } catch (Exception e){
-                    System.out.println("Excepcion: "+e.getMessage());
+                    ParpadeoBoton equipo = new ParpadeoBoton("ABOUT US");
+                    equipo.setFont(new Font("Tahoma", Font.PLAIN, 18));
+                    equipo.setBounds(240, 490, 140, 25);
+
+                    ParpadeoBoton salir = new ParpadeoBoton("EXIT GAME");
+                    salir.setFont(new Font("Tahoma", Font.PLAIN, 18));
+                    salir.setBounds(240, 525, 140, 25);
+
+                    getContentPane().removeAll();
+
+                    getContentPane().add(play);
+                    getContentPane().add(instrucciones);
+                    getContentPane().add(equipo);
+                    getContentPane().add(salir);
+
+                    revalidate();
+                    repaint();
+
+                    Timer temporizador = new Timer(500, play);
+                    temporizador.start();
+
+                    play.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            dispose();
+                            Ventana v1 = new Ventana();
+                            v1.setVisible(true);
+                        }
+                    });
+
+                    instrucciones.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            //dispose();
+                        }
+                    });
+
+                    equipo.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                           // dispose();
+                        }
+                    });
+
+                    salir.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            dispose();
+                            System.exit(0);
+                        }
+                    });
+
+                } catch (Exception e) {
+                    System.out.println("Excepcion: " + e.getMessage());
                 }
-
             }
         });
         hilo.start();
     }
+
 }

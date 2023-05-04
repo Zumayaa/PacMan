@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class Ventana extends JFrame{
 	public int super_x = 2;
@@ -13,6 +15,7 @@ public class Ventana extends JFrame{
 	private Boolean lleno = true;
 	public int tecla = 0;
     ArrayList<Rect> paredes = new ArrayList<Rect>();
+    ArrayList<Fantasma> fantasmas = new ArrayList<Fantasma>();
     private JPanel contentPane;
     
     public Ventana() {
@@ -78,6 +81,34 @@ public class Ventana extends JFrame{
 		
 		juego.setFocusable(true);
 		juego.requestFocus();
+		
+		//Se crean los fantasmas y se añaden
+		Fantasma fantasma1 = new Fantasma(250, 200, 20, 20, Color.red, paredes);
+		Fantasma fantasma2 = new Fantasma(250, 200, 20, 20, Color.pink, paredes);
+		Fantasma fantasma3 = new Fantasma(250, 200, 20, 20, Color.cyan, paredes);
+		Fantasma fantasma4 = new Fantasma(250, 200, 20, 20, Color.orange, paredes);
+
+		fantasmas.add(fantasma1);
+		fantasmas.add(fantasma2);
+		fantasmas.add(fantasma3);
+		fantasmas.add(fantasma4);
+        
+		//Hilo para mover los fantasmas aunque el jugador no este haciendo nada
+        for (Fantasma f : fantasmas) {
+            Thread t = new Thread(() -> {
+                while (true) {
+                    f.mover();
+                    juego.repaint();
+                    try {
+                        Thread.sleep(100); // Espera 100 milisegundos antes de mover el fantasma nuevamente
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            t.start();
+        }
+		
     }
     
 	public class MyGraphics extends JComponent{
@@ -245,7 +276,14 @@ public class Ventana extends JFrame{
 			
 			System.out.println(player.colision(pared));
 			
-			
+			//Esto de aqui muestra a los fantasmas y los mueve
+			if (fantasmas != null) {
+			    for (Fantasma f : fantasmas) {
+			        f.mover();
+			        g.setColor(f.c);
+			        g.fillOval(f.x, f.y, f.w, f.h);
+			    }
+			}
 		}
 	}
     
@@ -273,6 +311,75 @@ public class Ventana extends JFrame{
 			}
 			return false;
 		}
+	}
+	
+	//Se crea una nueva clase exclusiva para los fantasmas
+	public class Fantasma {
+	    int x, y, w, h;
+	    Color c;
+	    Random rnd = new Random();
+	    int dirX, dirY;
+
+	    List<Rect> paredes;
+
+	    public Fantasma(int x, int y, int w, int h, Color c, List<Rect> paredes) {
+	        this.x = x;
+	        this.y = y;
+	        this.w = w;
+	        this.h = h;
+	        this.c = c;
+	        this.paredes = paredes;
+
+	        dirX = rnd.nextInt(3) - 1;
+	        dirY = rnd.nextInt(3) - 1;
+	    }
+
+	    public void dibujar(Graphics g) {
+	        g.setColor(c);
+	        g.fillRect(x, y, 20, 20);
+	    }
+	    public void mover() {
+	    	int nuevaX = x + dirX;
+	    	int nuevaY = y + dirY;
+
+	    	  for (Rect pared : paredes) {
+	    	        if (nuevaX + w > pared.x && x < pared.x + pared.w &&
+	    	            nuevaY + h > pared.y && y < pared.y + pared.h) {
+	    	            // Hay colisión con una pared. Cambiar la dirección del movimiento (aun pendiente).
+	    	            if (dirX > 0) {
+	    	                dirX = -1;
+	    	            } else if (dirX < 0) {
+	    	                dirX = 1;
+	    	            } else if (dirY > 0) {
+	    	                dirY = -1;
+	    	            } else if (dirY < 0) {
+	    	                dirY = 1;
+	    	            }
+	    	            return;
+	    	        }
+	    	    }
+
+	    	    x = nuevaX;
+	    	    y = nuevaY;
+	    	
+	        Random rand = new Random();
+	        int dir = rand.nextInt(4); // Genera un número aleatorio entre 0 y 3 para la direccion
+	        int velocidad = 3;
+	        switch (dir) {
+	            case 0:
+	                x += velocidad;
+	                break;
+	            case 1:
+	                x -= velocidad;
+	                break;
+	            case 2:
+	                y += velocidad;
+	                break;
+	            case 3:
+	                y -= velocidad;
+	                break;
+	        }
+	    }
 	}
 }
 

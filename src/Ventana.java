@@ -1,9 +1,13 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -83,10 +87,10 @@ public class Ventana extends JFrame{
 		juego.requestFocus();
 		
 		//Se crean los fantasmas y se añaden
-		Fantasma fantasma1 = new Fantasma(250, 200, 20, 20, Color.red, paredes);
-		Fantasma fantasma2 = new Fantasma(250, 200, 20, 20, Color.pink, paredes);
-		Fantasma fantasma3 = new Fantasma(250, 200, 20, 20, Color.cyan, paredes);
-		Fantasma fantasma4 = new Fantasma(250, 200, 20, 20, Color.orange, paredes);
+		Fantasma fantasma1 = new Fantasma(55, 200, 20, 20, Color.red, paredes);
+		Fantasma fantasma2 = new Fantasma(55, 200, 20, 20, Color.pink, paredes);
+		Fantasma fantasma3 = new Fantasma(55, 200, 20, 20, Color.cyan, paredes);
+		Fantasma fantasma4 = new Fantasma(55, 200, 20, 20, Color.orange, paredes);
 
 		fantasmas.add(fantasma1);
 		fantasmas.add(fantasma2);
@@ -280,8 +284,7 @@ public class Ventana extends JFrame{
 			if (fantasmas != null) {
 			    for (Fantasma f : fantasmas) {
 			        f.mover();
-			        g.setColor(f.c);
-			        g.fillOval(f.x, f.y, f.w, f.h);
+			        g.drawImage(f.imagen, f.x, f.y, f.w, f.h, null);
 			    }
 			}
 		}
@@ -321,6 +324,7 @@ public class Ventana extends JFrame{
 	    int dirX, dirY;
 
 	    List<Rect> paredes;
+	    BufferedImage imagen;
 
 	    public Fantasma(int x, int y, int w, int h, Color c, List<Rect> paredes) {
 	        this.x = x;
@@ -332,6 +336,22 @@ public class Ventana extends JFrame{
 
 	        dirX = rnd.nextInt(3) - 1;
 	        dirY = rnd.nextInt(3) - 1;
+	        
+	        //Se añaden las imagenes de los fantasmas comparando si es igual al color del fantasma
+	        try {
+	            if (c.equals(Color.red)) {
+	                imagen = ImageIO.read(new File("imagenes/rojo.png"));
+	            } else if (c.equals(Color.pink)) {
+	                imagen = ImageIO.read(new File("imagenes/rosa.png"));
+	            } else if (c.equals(Color.cyan)) {
+	                imagen = ImageIO.read(new File("imagenes/cyan.png"));
+	            } else if (c.equals(Color.orange)) {
+	                imagen = ImageIO.read(new File("imagenes/naranja.png"));
+	            }
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	        
 	    }
 
 	    public void dibujar(Graphics g) {
@@ -339,46 +359,52 @@ public class Ventana extends JFrame{
 	        g.fillRect(x, y, 20, 20);
 	    }
 	    public void mover() {
-	    	int nuevaX = x + dirX;
-	    	int nuevaY = y + dirY;
+	        int newX = x + dirX;
+	        int newY = y + dirY;
 
-	    	  for (Rect pared : paredes) {
-	    	        if (nuevaX + w > pared.x && x < pared.x + pared.w &&
-	    	            nuevaY + h > pared.y && y < pared.y + pared.h) {
-	    	            // Hay colisión con una pared. Cambiar la dirección del movimiento (aun pendiente).
-	    	            if (dirX > 0) {
-	    	                dirX = -1;
-	    	            } else if (dirX < 0) {
-	    	                dirX = 1;
-	    	            } else if (dirY > 0) {
-	    	                dirY = -1;
-	    	            } else if (dirY < 0) {
-	    	                dirY = 1;
-	    	            }
-	    	            return;
-	    	        }
-	    	    }
-
-	    	    x = nuevaX;
-	    	    y = nuevaY;
-	    	
-	        Random rand = new Random();
-	        int dir = rand.nextInt(4); // Genera un número aleatorio entre 0 y 3 para la direccion
-	        int velocidad = 3;
-	        switch (dir) {
-	            case 0:
-	                x += velocidad;
-	                break;
-	            case 1:
-	                x -= velocidad;
-	                break;
-	            case 2:
-	                y += velocidad;
-	                break;
-	            case 3:
-	                y -= velocidad;
-	                break;
+	        if (!hayColision(dirX, dirY)) {
+	            x = newX;
+	            y = newY;
+	        } else {
+	            int intentos = 0;
+	            while (intentos < 10) { // intenta varias veces encontrar una dirección sin colisión
+	                int rand = (int) (Math.random() * 4); // elige una dirección aleatoria
+	                switch (rand) {
+	                    case 0:
+	                        dirX = -1;
+	                        dirY = 0;
+	                        break;
+	                    case 1:
+	                        dirX = 1;
+	                        dirY = 0;
+	                        break;
+	                    case 2:
+	                        dirX = 0;
+	                        dirY = -1;
+	                        break;
+	                    case 3:
+	                        dirX = 0;
+	                        dirY = 1;
+	                        break;
+	                }
+	                if (!hayColision(dirX, dirY)) { // verifica si la nueva dirección no tiene colisión
+	                    x += dirX;
+	                    y += dirY;
+	                    break;
+	                }
+	                intentos++;
+	            }
 	        }
+	    }
+	    //Se crea un metodo que verifique si hay una colision con las paredes con el método de la colision ya antes escrita
+	    public boolean hayColision(int dirX, int dirY) {
+	        for (Rect pared : paredes) {
+	            Rect futuro = new Rect(x + dirX, y + dirY, w, h, null);
+	            if (futuro.colision(pared)) {
+	                return true;
+	            }
+	        }
+	        return false;
 	    }
 	}
 }

@@ -130,10 +130,10 @@ public class Ventana extends JFrame{
 
 
 		//Se crean los fantasmas y se añaden
-		Fantasma fantasma1 = new Fantasma(55, 220, 20, 20, Color.red, paredes);
-		Fantasma fantasma2 = new Fantasma(55, 220, 20, 20, Color.pink, paredes);
-		Fantasma fantasma3 = new Fantasma(55, 220, 20, 20, Color.cyan, paredes);
-		Fantasma fantasma4 = new Fantasma(55, 220, 20, 20, Color.orange, paredes);
+		Fantasma fantasma1 = new Fantasma(160, 160, 20, 20, Color.red, paredes);
+		Fantasma fantasma2 = new Fantasma(180, 180, 20, 20, Color.pink, paredes);
+		Fantasma fantasma3 = new Fantasma(160, 220, 20, 20, Color.cyan, paredes);
+		Fantasma fantasma4 = new Fantasma(180, 200, 20, 20, Color.orange, paredes);
 
 		fantasmas.add(fantasma1);
 		fantasmas.add(fantasma2);
@@ -141,20 +141,23 @@ public class Ventana extends JFrame{
 		fantasmas.add(fantasma4);
 
 		//Hilo para mover los fantasmas aunque el jugador no este haciendo nada
+	    Object bloqueo = new Object(); // Crear un objeto de bloqueo para cada instancia de Fantasma
 		for (Fantasma f : fantasmas) {
-			Thread t = new Thread(() -> {
-				while (true) {
-					f.mover();
-					juego.repaint();
-					try {
-						Thread.sleep(100); // Espera 100 milisegundos antes de mover el fantasma nuevamente
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			});
+		    Thread t = new Thread(() -> {
+		        while (true) {
+		            synchronized (bloqueo) { // Obtener el bloqueo correspondiente a la instancia actual de Fantasma
+		                f.mover();
+		            }
+		            juego.repaint();
+		            try {
+		                Thread.sleep(70); // Espera 70 milisegundos antes de mover el fantasma nuevamente
+		            } catch (InterruptedException e) {
+		                e.printStackTrace();
+		            }
+		        }
+		    });
 
-			t.start();
+		    t.start();
 		}
 
 	}
@@ -314,52 +317,56 @@ public class Ventana extends JFrame{
 			g.fillRect(x, y, 20, 20);
 		}
 		public void mover() {
-			int newX = x + dirX;
-			int newY = y + dirY;
+		    synchronized (this) { // Obtener el bloqueo del objeto
+		        int newX = x + dirX;
+		        int newY = y + dirY;
 
-			if (!hayColision(dirX, dirY)) {
-				x = newX;
-				y = newY;
-			} else {
-				int intentos = 0;
-				while (intentos < 10) { // intenta varias veces encontrar una dirección sin colisión
-					int rand = (int) (Math.random() * 4); // elige una dirección aleatoria
-					switch (rand) {
-						case 0:
-							dirX = -1;
-							dirY = 0;
-							break;
-						case 1:
-							dirX = 1;
-							dirY = 0;
-							break;
-						case 2:
-							dirX = 0;
-							dirY = -1;
-							break;
-						case 3:
-							dirX = 0;
-							dirY = 1;
-							break;
-					}
-					if (!hayColision(dirX, dirY)) { // verifica si la nueva dirección no tiene colisión
-						x += dirX;
-						y += dirY;
-						break;
-					}
-					intentos++;
-				}
-			}
+		        if (!hayColision(dirX, dirY)) {
+		            x = newX;
+		            y = newY;
+
+		        } else {
+		            int intentos = 0;
+		            while (intentos < 20) { // intenta varias veces encontrar una dirección sin colisión
+		                int rand = (int) (Math.random() * 4); // elige una dirección aleatoria
+		                switch (rand) {
+		                    case 0:
+		                        dirX = -1;
+		                        dirY = 0;
+		                        break;
+		                    case 1:
+		                        dirX = 1;
+		                        dirY = 0;
+		                        break;
+		                    case 2:
+		                        dirX = 0;
+		                        dirY = -1;
+		                        break;
+		                    case 3:
+		                        dirX = 0;
+		                        dirY = 1;
+		                        break;
+		                }
+		                if (!hayColision(dirX, dirY)) { // verifica si la nueva dirección no tiene colisión
+		                    x += dirX;
+		                    y += dirY;
+		                    break;
+		                }
+		                intentos++;
+		            }
+		        }
+		    }
 		}
 		//Se crea un metodo que verifique si hay una colision con las paredes con el método de la colision ya antes escrita
 		public boolean hayColision(int dirX, int dirY) {
-			for (Rect pared : paredes) {
-				Rect futuro = new Rect(x + dirX, y + dirY, w, h, null);
-				if (futuro.colision(pared)) {
-					return true;
-				}
-			}
-			return false;
+		    List<Rect> copiaParedes = new ArrayList<>(paredes);
+		    for (Rect pared : copiaParedes) {
+		        Rect futuro = new Rect(x + dirX, y + dirY, w, h, null);
+		        if (futuro.colision(pared)) {
+		            return true;
+		        }
+		    }
+		    return false;
 		}
 	}
 }

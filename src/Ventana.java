@@ -13,39 +13,66 @@ import java.util.List;
 import java.util.Random;
 
 public class Ventana extends JFrame{
-	public int super_x = 2;
-	public int super_y = 2;
-	public int puntos = 0;
-	private Boolean lleno = true;
-	private Boolean llenoPuntos = true;
-	public int tecla = 0;
-    ArrayList<Rect> paredes = new ArrayList<Rect>();
-    ArrayList<Fantasma> fantasmas = new ArrayList<Fantasma>();
-    ArrayList<Rect> punto = new ArrayList<Rect>();
-    private JPanel contentPane;
-    
-    public Ventana() {
-        //PROPIEDADES VENTANA
-        this.setTitle("PacMan");
-        this.setSize(600,600);
-        this.setLayout(new BorderLayout());
-        this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setVisible(true);
-        
-        contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+	public int px=20;
+	public int py=20;
+	int anteriorPx, anteriorPy;
+	private Image pacman;
+	ArrayList<Rect> paredes = new ArrayList<Rect>();
+	ArrayList<Rect> comidas = new ArrayList<>();
+	ArrayList<Fantasma> fantasmas = new ArrayList<Fantasma>();
 
-		setContentPane(contentPane);
-		contentPane.setLayout(new BorderLayout(0, 0));
-		
+	private int[][] laberinto = {
+			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+			{1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1},
+			{1,0,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,0,1},
+			{1,0,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,0,1},
+			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+			{1,0,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,0,1},
+			{1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,1},
+			{1,1,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,1,1},
+			{2,2,2,1,0,1,0,0,0,0,0,0,0,1,0,1,2,2,2},
+			{2,2,2,1,0,1,0,1,1,2,1,1,0,1,0,1,2,2,2},
+			{1,1,1,1,0,1,0,1,2,2,2,1,0,1,0,1,1,1,1},
+			{1,0,0,0,0,0,0,1,2,2,2,1,0,0,0,0,0,0,1},
+			{1,1,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,1,1},
+			{2,2,2,1,0,1,0,0,0,0,0,0,0,1,0,1,2,2,2},
+			{2,2,2,1,0,1,0,1,1,1,1,1,0,1,0,1,2,2,2},
+			{1,1,1,1,0,1,0,0,0,1,0,0,0,1,0,1,1,1,1},
+			{1,0,0,0,0,0,0,1,0,1,0,1,0,0,0,0,0,0,1},
+			{1,0,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,0,1},
+			{1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1},
+			{1,1,0,1,0,1,0,1,1,1,1,1,0,1,0,1,0,1,1},
+			{1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,1},
+			{1,0,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,0,1},
+			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+	};
+	public Ventana() {
+		pacman = new ImageIcon("imagenes/pacman.png").getImage();
+
+		//PROPIEDADES VENTANA
+		this.setTitle("Pacman");
+		this.setSize(600,600);
+		this.setLayout(new BorderLayout());
+		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setVisible(true);
+
 		JPanel panel = new JPanel();
-		contentPane.add(panel, BorderLayout.SOUTH);
-        
-		JPanel juego = new JPanel();
-		juego.setBackground(Color.black);
-		contentPane.add(juego, BorderLayout.CENTER);
-		juego.add(new MyGraphics());
+		panel.setBackground(Color.black);
+
+		JPanel juego = new JPanel(new BorderLayout());
+		juego.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		juego.setBackground(Color.decode("#c6dee9"));
+		juego.add(panel, BorderLayout.CENTER);
+
+		juego.add(new MiPanel());
+
+		this.add(juego, BorderLayout.CENTER);
+
+		this.repaint();
+		this.revalidate();
+
 		juego.addKeyListener(new KeyListener() {
 
 			@Override
@@ -57,269 +84,161 @@ public class Ventana extends JFrame{
 			public void keyPressed(KeyEvent e) {
 				// TODO Auto-generated method stub
 				System.out.println(e.getKeyCode());
-				
-				if((e.getKeyCode() == 87 || e.getKeyCode() == 38) && super_y>0) {
-					super_y -= 2;
-					tecla = e.getKeyCode();
+
+				anteriorPx = px;
+				anteriorPy = py;
+
+				if(e.getKeyCode() == 87 && py > 0) {
+					py = py - 5;
+					colision();
 				}
-				if((e.getKeyCode() == 83 || e.getKeyCode() == 40) && super_y <430) {
-					super_y += 2;
-					tecla = e.getKeyCode();
+				if(e.getKeyCode() == 83 && py < 460) {
+					py = py + 5;
+					colision();
 				}
-				if((e.getKeyCode() == 65 || e.getKeyCode() == 37) && super_x > 0) {
-					super_x -= 2;
-					tecla = e.getKeyCode();
+				if(e.getKeyCode() == 65 && px > 0) {
+					px = px - 5;
+					colision();
 				}
-				if((e.getKeyCode() == 68 || e.getKeyCode() == 39) && super_x < 490) {
-					super_x += 2;
-					tecla = e.getKeyCode();
+				if(e.getKeyCode() == 68 && px < 460) {
+					px = px + 5;
+					colision();
 				}
-				juego.repaint();
+
+				repaint();
+				revalidate();
+				//juego.repaint();
 			}
-			
+
+
 			@Override
 			public void keyReleased(KeyEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 		});
-		
+
 		juego.setFocusable(true);
 		juego.requestFocus();
-		
+
+
 		//Se crean los fantasmas y se añaden
-		Fantasma fantasma1 = new Fantasma(55, 200, 20, 20, Color.red, paredes);
-		Fantasma fantasma2 = new Fantasma(55, 200, 20, 20, Color.pink, paredes);
-		Fantasma fantasma3 = new Fantasma(55, 200, 20, 20, Color.cyan, paredes);
-		Fantasma fantasma4 = new Fantasma(55, 200, 20, 20, Color.orange, paredes);
+		Fantasma fantasma1 = new Fantasma(55, 220, 20, 20, Color.red, paredes);
+		Fantasma fantasma2 = new Fantasma(55, 220, 20, 20, Color.pink, paredes);
+		Fantasma fantasma3 = new Fantasma(55, 220, 20, 20, Color.cyan, paredes);
+		Fantasma fantasma4 = new Fantasma(55, 220, 20, 20, Color.orange, paredes);
 
 		fantasmas.add(fantasma1);
 		fantasmas.add(fantasma2);
 		fantasmas.add(fantasma3);
 		fantasmas.add(fantasma4);
-        
+
 		//Hilo para mover los fantasmas aunque el jugador no este haciendo nada
-        for (Fantasma f : fantasmas) {
-            Thread t = new Thread(() -> {
-                while (true) {
-                    f.mover();
-                    juego.repaint();
-                    try {
-                        Thread.sleep(100); // Espera 100 milisegundos antes de mover el fantasma nuevamente
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            t.start();
-        }
-		
-    }
-    
-	public class MyGraphics extends JComponent{
-		private static final long serialVersionUID = 1L;
-		
-		MyGraphics(){
-			setPreferredSize(new Dimension(500,500));
+		for (Fantasma f : fantasmas) {
+			Thread t = new Thread(() -> {
+				while (true) {
+					f.mover();
+					juego.repaint();
+					try {
+						Thread.sleep(100); // Espera 100 milisegundos antes de mover el fantasma nuevamente
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+
+			t.start();
 		}
-		public void paintComponent(Graphics g) {
-			super.paintComponent(g);
-			
-			g.setColor(Color.gray);
-	        g.drawRect(0, 0, 499, 440);
-			
-			Rect player = new Rect(super_x,super_y,10,10, Color.yellow);
-			g.setColor(player.c);
-			g.fillRect(player.x, player.y, player.w, player.h);
-			
-			//					  x   y w  h
-			Rect pared = new Rect(13, 0,3,50,Color.decode("#00ffff"));
-			g.setColor(pared.c);
-			g.fillRect(pared.x, pared.y, pared.w, pared.h);
-			
-			Rect pared2 = new Rect(13, 50,20,3,Color.decode("#00ffff"));
-			g.setColor(pared2.c);
-			g.fillRect(pared2.x, pared2.y, pared2.w, pared2.h);
-			
-			Rect pared3 = new Rect(30, 30,3,60,Color.decode("#00ffff"));
-			g.setColor(pared3.c);
-			g.fillRect(pared3.x, pared3.y, pared3.w, pared3.h);
-			
-			Rect pared4 = new Rect(30, 90,20,3,Color.decode("#00ffff"));
-			g.setColor(pared4.c);
-			g.fillRect(pared4.x, pared4.y, pared4.w, pared4.h);
-			
-			Rect pared5 = new Rect(30, 130,20,3,Color.decode("#00ffff"));
-			g.setColor(pared5.c);
-			g.fillRect(pared5.x, pared5.y, pared5.w, pared5.h);
-			
-			Rect pared6 = new Rect(50, 90,3,300,Color.decode("#00ffff"));
-			g.setColor(pared6.c);
-			g.fillRect(pared6.x, pared6.y, pared6.w, pared6.h);
-			
-			Rect pared7 = new Rect(20, 160,3,260,Color.decode("#00ffff"));
-			g.setColor(pared7.c);
-			g.fillRect(pared7.x, pared7.y, pared7.w, pared7.h);
-			
-			Rect pared8 = new Rect(20, 420,90,3,Color.decode("#00ffff"));
-			g.setColor(pared8.c);
-			g.fillRect(pared8.x, pared8.y, pared8.w, pared8.h);
-			
-			Rect pared9 = new Rect(110, 420,3,20,Color.decode("#00ffff"));
-			g.setColor(pared9.c);
-			g.fillRect(pared9.x, pared9.y, pared9.w, pared9.h);
-			
-			Rect pared10 = new Rect(50, 390,60,3,Color.decode("#00ffff"));
-			g.setColor(pared10.c);
-			g.fillRect(pared10.x, pared10.y, pared10.w, pared10.h);
-			
-			Rect pared11 = new Rect(110, 363,3,30,Color.decode("#00ffff"));
-			g.setColor(pared11.c);
-			g.fillRect(pared11.x, pared11.y, pared11.w, pared11.h);
-			
-			Rect pared12 = new Rect(80, 220, 3, 150, Color.decode("#00ffff"));
-			g.setColor(pared12.c);
-			g.fillRect(pared12.x, pared12.y, pared12.w, pared12.h);
-			
-			Rect pared13 = new Rect(80, 220, 60, 3, Color.decode("#00ffff"));
-			g.setColor(pared13.c);
-			g.fillRect(pared13.x, pared13.y, pared13.w, pared13.h);
-			
-			Rect pared14 = new Rect(110, 150, 3, 70, Color.decode("#00ffff"));
-			g.setColor(pared14.c);
-			g.fillRect(pared14.x, pared14.y, pared14.w, pared14.h);
-			
-			Rect pared15 = new Rect(80, 70, 3, 130, Color.decode("#00ffff"));
-			g.setColor(pared15.c);
-			g.fillRect(pared15.x, pared15.y, pared15.w, pared15.h);
-			
-			Rect pared16 = new Rect(50, 70,60,3, Color.decode("#00ffff"));
-			g.setColor(pared16.c);
-			g.fillRect(pared16.x, pared16.y, pared16.w, pared16.h);
-			
-			Rect pared17 = new Rect(50, 70,60,3, Color.decode("#00ffff"));
-			g.setColor(pared17.c);
-			g.fillRect(pared17.x, pared17.y, pared17.w, pared17.h);
-			
-			Rect pared18 = new Rect(110, 180, 3, 70, Color.decode("#00ffff"));
-			g.setColor(pared18.c);
-			g.fillRect(pared18.x, pared18.y, pared18.w, pared18.h);
-			
-			Rect pared19 = new Rect(110, 280, 3, 70, Color.decode("#00ffff"));
-			g.setColor(pared19.c);
-			g.fillRect(pared19.x, pared19.y, pared19.w, pared19.h);
-			
-			Rect pared20 = new Rect(140, 220, 60, 3, Color.decode("#00ffff"));
-			g.setColor(pared20.c);
-			g.fillRect(pared20.x, pared20.y, pared20.w, pared20.h);
-			
-			//Puntos pacman
-			Rect p1 = new Rect(10, 190, 4, 4, Color.red);
-			g.setColor(p1.c);
-			g.fillRect(p1.x, p1.y, p1.w, p1.h);
-			
-			if(llenoPuntos) {
-				punto.add(p1);
-				
-				llenoPuntos = false;
-			}
-			// no elimina el punto del panel aun
-			for(int i = 0; i< punto.size();i++) {
-				if(player.colision(punto.get(i))) {
-					punto.remove(i);
-					puntos++;
-					System.out.println("PUNTOSSSSSSSSSSSSSSSSSSSSSSS: " + puntos);
-					
-					repaint();
-				}
-			}
-	
-			//Este if mete todos los objetos dentro del array, se pone en un if porque sin fuese asi, este se llenaría infinitamente ya que la clase se ejecuta todo el tiempo :p
-			if(lleno) {
-				paredes.add(pared);
-				paredes.add(pared2);
-				paredes.add(pared3);
-				paredes.add(pared4);
-				paredes.add(pared5);
-				paredes.add(pared6);
-				paredes.add(pared7);
-				paredes.add(pared8);
-				paredes.add(pared9);
-				paredes.add(pared10);
-				paredes.add(pared11);
-				paredes.add(pared12);
-				paredes.add(pared13);
-				paredes.add(pared14);
-				paredes.add(pared15);
-				paredes.add(pared16);
-				paredes.add(pared17);
-				paredes.add(pared18);
-				paredes.add(pared19);
-				paredes.add(pared20);
-			    
-			    lleno = false;
-			}
-			/*
-			 * Para mis compañeros!! De esta manera funciona la colisión, basicamente hace lo mismo que el keyListener pero si se dan cuenta es detectar
-			 * la ultima tecla que se presionó y en vez de hacer la función que hace normalmente que puede ser avanzar a la derecha, este retrocedera la misma cantidad de px a la izq
-			 * Por lo tanto no se podrá mover en la dirección que se presionó
-			 */
-			for(int i = 0; i< paredes.size();i++) {
-				if(player.colision(paredes.get(i))) {
-					if((tecla == 87 || tecla == 38)) {
-						super_y += 2;	
-					}
-					if((tecla == 83 || tecla == 40)) {
-						super_y -= 2;
-					}
-					if((tecla == 65 || tecla == 37)) {
-						super_x += 2;
-					}
-					if((tecla == 68 || tecla == 39)) {
-						super_x -= 2;
-					}
-				}
-			}
-			
-			//#FF0000
-			Rect ganar = new Rect(490, 0, 10, 10, Color.decode("#23c423"));
-			g.setColor(ganar.c);
-			g.fillRect(ganar.x, ganar.y, ganar.w, ganar.h);
-			
-			
-			if(player.colision(ganar)) {
-				super_x = 2;
-				super_y = 2;
-				
-				String tiempo = "";
-				
-				JOptionPane.showMessageDialog(null, "Tu tiempo fue: " + tiempo,"FELICIDADES!",JOptionPane.INFORMATION_MESSAGE);
-				
-				repaint();
-				revalidate();
-				
-			}
-			
-			System.out.println(player.colision(pared));
-			
-			//Esto de aqui muestra a los fantasmas y los mueve
-			if (fantasmas != null) {
-			    for (Fantasma f : fantasmas) {
-			        f.mover();
-			        g.drawImage(f.imagen, f.x, f.y, f.w, f.h, null);
-			    }
+
+	}
+
+	public void colision(){
+
+		Rect r = new Rect(px, py, 20, 20, Color.yellow);
+
+		for (Rect pared : paredes) {
+			if (r.colision(pared)) {
+
+				px = anteriorPx;
+				py = anteriorPy;
+				break;
 			}
 		}
 	}
-    
+
+	class MiPanel extends JPanel {
+
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+
+			//JUGADOR
+			Rect r = new Rect(px, py, 20, 20, null);
+			g.setColor(r.c);
+			g.fillRect(r.x, r.y, r.w, r.h);
+			g.drawImage(pacman, px, py, this);
+			//PAREDES
+
+			for(int i = 0; i < laberinto.length; i++) {
+
+				for(int j = 0; j < laberinto[i].length; j++) {
+
+					if(laberinto[i][j] == 1) {
+						//CREA OBJETO RECT Y LO AGREGA AL ARRAY
+						Rect pared = new Rect(j * 20, i * 20, 20, 20, Colores.colorParedes);
+						paredes.add(pared);
+
+					} else if(laberinto[i][j] == 2){
+						Rect e= new Rect(j, i, 0, 0, Color.red);
+						g.setColor(e.c);
+						g.fillRect(e.x, e.y, e.w, e.h);
+
+					} else if(laberinto[i][j] == 0) {
+						Rect c= new Rect(j*20, i*20, 20, 20, Color.yellow);
+						// comida.add(c);
+					}
+				}
+			}
+
+			//SE PINTAN PAREDES
+			for (Rect pared : paredes) {
+				g.setColor(pared.c);
+				g.fillRect(pared.x, pared.y, pared.w, pared.h);
+			}
+
+			//COMIDA
+        /*for (Rect c : comida) {
+            g.setColor(c.c);
+            g.fillRect(c.x, c.y, c.w, c.h);
+        }*/
+
+
+			//Esto de aqui muestra a los fantasmas y los mueve
+			if (fantasmas != null) {
+				for (Fantasma f : fantasmas) {
+					f.mover();
+					g.drawImage(f.imagen, f.x, f.y, f.w, f.h, null);
+				}
+			}
+		}
+	}
+
+	public class Colores {
+		public static Color colorParedes = Color.black;
+
+		public static void cambiarColores() {
+			Random random = new Random();
+			colorParedes = new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256));
+		}
+	}
+
 	public class Rect{
 		int x = 0;
 		int y = 0;
 		int w = 0;
 		int h = 0;
 		Color c = Color.black;
-		
+
 		Rect(int x, int y, int w, int h, Color c){
 			this.x = x;
 			this.y = y;
@@ -327,9 +246,9 @@ public class Ventana extends JFrame{
 			this.h = h;
 			this.c = c;
 		}
-		
+
 		public Boolean colision(Rect target) {
-			if(this.x < target.x + target.w && 
+			if(this.x < target.x + target.w &&
 					this.x + this.w > target.x &&
 					this.y < target.y + target.h &&
 					this.y + this.h > target.y) {
@@ -338,97 +257,97 @@ public class Ventana extends JFrame{
 			return false;
 		}
 	}
-	
+
 	//Se crea una nueva clase exclusiva para los fantasmas
 	public class Fantasma {
-	    int x, y, w, h;
-	    Color c;
-	    Random rnd = new Random();
-	    int dirX, dirY;
+		int x, y, w, h;
+		Color c;
+		Random rnd = new Random();
+		int dirX, dirY;
 
-	    List<Rect> paredes;
-	    BufferedImage imagen;
+		List<Rect> paredes;
+		BufferedImage imagen;
 
-	    public Fantasma(int x, int y, int w, int h, Color c, List<Rect> paredes) {
-	        this.x = x;
-	        this.y = y;
-	        this.w = w;
-	        this.h = h;
-	        this.c = c;
-	        this.paredes = paredes;
+		public Fantasma(int x, int y, int w, int h, Color c, List<Rect> paredes) {
+			this.x = x;
+			this.y = y;
+			this.w = w;
+			this.h = h;
+			this.c = c;
+			this.paredes = paredes;
 
-	        dirX = rnd.nextInt(3) - 1;
-	        dirY = rnd.nextInt(3) - 1;
-	        
-	        //Se añaden las imagenes de los fantasmas comparando si es igual al color del fantasma
-	        try {
-	            if (c.equals(Color.red)) {
-	                imagen = ImageIO.read(new File("imagenes/rojo.png"));
-	            } else if (c.equals(Color.pink)) {
-	                imagen = ImageIO.read(new File("imagenes/rosa.png"));
-	            } else if (c.equals(Color.cyan)) {
-	                imagen = ImageIO.read(new File("imagenes/cyan.png"));
-	            } else if (c.equals(Color.orange)) {
-	                imagen = ImageIO.read(new File("imagenes/naranja.png"));
-	            }
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
-	        
-	    }
+			dirX = rnd.nextInt(3) - 1;
+			dirY = rnd.nextInt(3) - 1;
 
-	    public void dibujar(Graphics g) {
-	        g.setColor(c);
-	        g.fillRect(x, y, 20, 20);
-	    }
-	    public void mover() {
-	        int newX = x + dirX;
-	        int newY = y + dirY;
+			//Se añaden las imagenes de los fantasmas comparando si es igual al color del fantasma
+			try {
+				if (c.equals(Color.red)) {
+					imagen = ImageIO.read(new File("imagenes/rojo.png"));
+				} else if (c.equals(Color.pink)) {
+					imagen = ImageIO.read(new File("imagenes/rosa.png"));
+				} else if (c.equals(Color.cyan)) {
+					imagen = ImageIO.read(new File("imagenes/cyan.png"));
+				} else if (c.equals(Color.orange)) {
+					imagen = ImageIO.read(new File("imagenes/naranja.png"));
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
-	        if (!hayColision(dirX, dirY)) {
-	            x = newX;
-	            y = newY;
-	        } else {
-	            int intentos = 0;
-	            while (intentos < 10) { // intenta varias veces encontrar una dirección sin colisión
-	                int rand = (int) (Math.random() * 4); // elige una dirección aleatoria
-	                switch (rand) {
-	                    case 0:
-	                        dirX = -1;
-	                        dirY = 0;
-	                        break;
-	                    case 1:
-	                        dirX = 1;
-	                        dirY = 0;
-	                        break;
-	                    case 2:
-	                        dirX = 0;
-	                        dirY = -1;
-	                        break;
-	                    case 3:
-	                        dirX = 0;
-	                        dirY = 1;
-	                        break;
-	                }
-	                if (!hayColision(dirX, dirY)) { // verifica si la nueva dirección no tiene colisión
-	                    x += dirX;
-	                    y += dirY;
-	                    break;
-	                }
-	                intentos++;
-	            }
-	        }
-	    }
-	    //Se crea un metodo que verifique si hay una colision con las paredes con el método de la colision ya antes escrita
-	    public boolean hayColision(int dirX, int dirY) {
-	        for (Rect pared : paredes) {
-	            Rect futuro = new Rect(x + dirX, y + dirY, w, h, null);
-	            if (futuro.colision(pared)) {
-	                return true;
-	            }
-	        }
-	        return false;
-	    }
+		}
+
+		public void dibujar(Graphics g) {
+			g.setColor(c);
+			g.fillRect(x, y, 20, 20);
+		}
+		public void mover() {
+			int newX = x + dirX;
+			int newY = y + dirY;
+
+			if (!hayColision(dirX, dirY)) {
+				x = newX;
+				y = newY;
+			} else {
+				int intentos = 0;
+				while (intentos < 10) { // intenta varias veces encontrar una dirección sin colisión
+					int rand = (int) (Math.random() * 4); // elige una dirección aleatoria
+					switch (rand) {
+						case 0:
+							dirX = -1;
+							dirY = 0;
+							break;
+						case 1:
+							dirX = 1;
+							dirY = 0;
+							break;
+						case 2:
+							dirX = 0;
+							dirY = -1;
+							break;
+						case 3:
+							dirX = 0;
+							dirY = 1;
+							break;
+					}
+					if (!hayColision(dirX, dirY)) { // verifica si la nueva dirección no tiene colisión
+						x += dirX;
+						y += dirY;
+						break;
+					}
+					intentos++;
+				}
+			}
+		}
+		//Se crea un metodo que verifique si hay una colision con las paredes con el método de la colision ya antes escrita
+		public boolean hayColision(int dirX, int dirY) {
+			for (Rect pared : paredes) {
+				Rect futuro = new Rect(x + dirX, y + dirY, w, h, null);
+				if (futuro.colision(pared)) {
+					return true;
+				}
+			}
+			return false;
+		}
 	}
 }
 

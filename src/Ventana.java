@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -21,34 +22,39 @@ public class Ventana extends JFrame{
 	ArrayList<Rect> comidas = new ArrayList<>();
 	ArrayList<Fantasma> fantasmas = new ArrayList<Fantasma>();
 
-	private int[][] laberinto = {
-			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-			{1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1},
-			{1,0,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,0,1},
-			{1,0,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,0,1},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-			{1,0,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,0,1},
-			{1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,1},
-			{1,1,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,1,1},
-			{2,2,2,1,0,1,0,0,0,0,0,0,0,1,0,1,2,2,2},
-			{2,2,2,1,0,1,0,1,1,2,1,1,0,1,0,1,2,2,2},
-			{1,1,1,1,0,1,0,1,2,2,2,1,0,1,0,1,1,1,1},
-			{1,0,0,0,0,0,0,1,2,2,2,1,0,0,0,0,0,0,1},
-			{1,1,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,1,1},
-			{2,2,2,1,0,1,0,0,0,0,0,0,0,1,0,1,2,2,2},
-			{2,2,2,1,0,1,0,1,1,1,1,1,0,1,0,1,2,2,2},
-			{1,1,1,1,0,1,0,0,0,1,0,0,0,1,0,1,1,1,1},
-			{1,0,0,0,0,0,0,1,0,1,0,1,0,0,0,0,0,0,1},
-			{1,0,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,0,1},
-			{1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1},
-			{1,1,0,1,0,1,0,1,1,1,1,1,0,1,0,1,0,1,1},
-			{1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,1},
-			{1,0,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,0,1},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+	private HashMap<String, Image> imagenes = new HashMap<String, Image>();
+
+	//LO CAMBIE A STRING PORQUE ME DI CUENTA QUE SE OCUPABAN MUCHOS DISEÑOS DE PAREDES :'V
+	private String[][] laberinto = {
+			{"1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"},
+			{"1","0","0","0","0","0","0","0","0","1","0","0","0","0","0","0","0","0","1"},
+			{"1","0","1","1","0","1","1","1","0","1","0","1","1","1","0","1","1","0","1"},
+			{"1","0","1","1","0","1","1","1","0","1","0","1","1","1","0","1","1","0","1"},
+			{"1","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","1"},
+			{"1","0","1","1","0","1","0","1","1","1","1","1","0","1","0","1","1","0","1"},
+			{"1","0","0","0","0","1","0","0","0","1","0","0","0","1","0","0","0","0","1"},
+			{"1","1","1","1","0","1","1","1","0","1","0","1","1","1","0","1","1","1","1"},
+			{"2","2","2","1","0","1","0","0","0","0","0","0","0","1","0","1","2","2","2"},
+			{"2","2","2","1","0","1","0","1","1","2","1","1","0","1","0","1","2","2","2"},
+			{"1","1","1","1","0","1","0","1","2","2","2","1","0","1","0","1","1","1","1"},
+			{"0","0","0","0","0","0","0","1","2","2","2","1","0","0","0","0","0","0","0"},
+			{"1","1","1","1","0","1","0","1","1","1","1","1","0","1","0","1","1","1","1"},
+			{"2","2","2","1","0","1","0","0","0","0","0","0","0","1","0","1","2","2","2"},
+			{"2","2","2","1","0","1","0","1","1","1","1","1","0","1","0","1","2","2","2"},
+			{"1","1","1","1","0","1","0","0","0","1","0","0","0","1","0","1","1","1","1"},
+			{"1","0","0","0","0","0","0","1","0","1","0","1","0","0","0","0","0","0","1"},
+			{"1","0","1","1","0","1","1","1","0","1","0","1","1","1","0","1","1","0","1"},
+			{"1","0","0","1","0","0","0","0","0","0","0","0","0","0","0","1","0","0","1"},
+			{"1","1","0","1","0","1","0","1","1","1","1","1","0","1","0","1","0","1","1"},
+			{"1","0","0","0","0","1","0","0","0","1","0","0","0","1","0","0","0","0","1"},
+			{"1","0","1","1","1","1","1","1","0","1","0","1","1","1","1","1","1","0","1"},
+			{"1","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","1"},
+			{"1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"},
 	};
 	public Ventana() {
 		pacman = new ImageIcon("imagenes/pacman.png").getImage();
+		imagenes.put("1", cargarImagen("imagenes/pared.png"));
+
 
 		//PROPIEDADES VENTANA
 		this.setTitle("Pacman");
@@ -105,8 +111,8 @@ public class Ventana extends JFrame{
 					colision();
 				}
 
-				repaint();
-				revalidate();
+				juego.repaint();
+				juego.revalidate();
 				//juego.repaint();
 			}
 
@@ -173,47 +179,43 @@ public class Ventana extends JFrame{
 			super.paintComponent(g);
 
 			//JUGADOR
-			Rect r = new Rect(px, py, 20, 20, null);
+			Rect r = new Rect(px, py, 20, 20, Color.yellow);
 			g.setColor(r.c);
 			g.fillRect(r.x, r.y, r.w, r.h);
 			g.drawImage(pacman, px, py, this);
+
 			//PAREDES
-
 			for(int i = 0; i < laberinto.length; i++) {
-
 				for(int j = 0; j < laberinto[i].length; j++) {
 
-					if(laberinto[i][j] == 1) {
-						//CREA OBJETO RECT Y LO AGREGA AL ARRAY
+					String letra = laberinto[i][j];
+
+					// Si la letra tiene una imagen asociada, la dibuja
+					if (imagenes.containsKey(letra)) {
+						Image imagen = imagenes.get(letra);
+						g.drawImage(imagen, j * 20, i * 20, this);
+
+					}
+
+					if(letra.equals("1")) {
 						Rect pared = new Rect(j * 20, i * 20, 20, 20, Colores.colorParedes);
 						paredes.add(pared);
-
-					} else if(laberinto[i][j] == 2){
-						Rect e= new Rect(j, i, 0, 0, Color.red);
-						g.setColor(e.c);
-						g.fillRect(e.x, e.y, e.w, e.h);
-
-					} else if(laberinto[i][j] == 0) {
-						Rect c= new Rect(j*20, i*20, 20, 20, Color.yellow);
-						// comida.add(c);
 					}
 				}
 			}
 
-			//SE PINTAN PAREDES
-			for (Rect pared : paredes) {
-				g.setColor(pared.c);
-				g.fillRect(pared.x, pared.y, pared.w, pared.h);
-			}
-
 			//COMIDA
-        /*for (Rect c : comida) {
-            g.setColor(c.c);
-            g.fillRect(c.x, c.y, c.w, c.h);
-        }*/
+	        /*for (Rect c : comida) {
+	            g.setColor(c.c);
+	            g.fillRect(c.x, c.y, c.w, c.h);
+	        }*/
 
 
-			//Esto de aqui muestra a los fantasmas y los mueve
+
+
+
+
+	//Esto de aqui muestra a los fantasmas y los mueve
 			if (fantasmas != null) {
 				for (Fantasma f : fantasmas) {
 					f.mover();
@@ -221,6 +223,17 @@ public class Ventana extends JFrame{
 				}
 			}
 		}
+	}
+
+	//CARGARÁ CADA IMAGEN INDEPENDIENTE PARA CADA PARED
+	private Image cargarImagen(String archivo) {
+		Image imagen = null;
+		try {
+			imagen = ImageIO.read(new File(archivo));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return imagen;
 	}
 
 	public class Colores {

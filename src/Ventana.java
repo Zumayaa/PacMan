@@ -17,9 +17,11 @@ public class Ventana extends JFrame{
 	public int super_y = 2;
 	public int puntos = 0;
 	private Boolean lleno = true;
+	private Boolean llenoPuntos = true;
 	public int tecla = 0;
     ArrayList<Rect> paredes = new ArrayList<Rect>();
     ArrayList<Fantasma> fantasmas = new ArrayList<Fantasma>();
+    ArrayList<Rect> punto = new ArrayList<Rect>();
     private JPanel contentPane;
     
     public Ventana() {
@@ -211,6 +213,27 @@ public class Ventana extends JFrame{
 			Rect pared20 = new Rect(140, 220, 60, 3, Color.decode("#00ffff"));
 			g.setColor(pared20.c);
 			g.fillRect(pared20.x, pared20.y, pared20.w, pared20.h);
+			
+			//Puntos pacman
+			Rect p1 = new Rect(10, 190, 4, 4, Color.red);
+			g.setColor(p1.c);
+			g.fillRect(p1.x, p1.y, p1.w, p1.h);
+			
+			if(llenoPuntos) {
+				punto.add(p1);
+				
+				llenoPuntos = false;
+			}
+			// no elimina el punto del panel aun
+			for(int i = 0; i< punto.size();i++) {
+				if(player.colision(punto.get(i))) {
+					punto.remove(i);
+					puntos++;
+					System.out.println("PUNTOSSSSSSSSSSSSSSSSSSSSSSS: " + puntos);
+					
+					repaint();
+				}
+			}
 	
 			//Este if mete todos los objetos dentro del array, se pone en un if porque sin fuese asi, este se llenaría infinitamente ya que la clase se ejecuta todo el tiempo :p
 			if(lleno) {

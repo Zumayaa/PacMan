@@ -14,8 +14,10 @@ import java.util.List;
 import java.util.Random;
 
 public class Ventana extends JFrame{
-	public int px=120;
+
+	public int px=120;//Posicion X del persona
 	public int py=60;
+
 	int anteriorPx, anteriorPy;
 	private Image pacman;
 	ArrayList<Rect> paredes = new ArrayList<Rect>();
@@ -29,11 +31,9 @@ public class Ventana extends JFrame{
 
 	private HashMap<String, Image> imagenes = new HashMap<String, Image>();
 
+
 	//LO CAMBIE A STRING PORQUE ME DI CUENTA QUE SE OCUPABAN MUCHOS DISEÑOS DE PAREDES :'V
 	private String[][] laberinto = {
-
-			{"E","E","E","E","E",	"E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E"},
-			{"E","E","E","E","E",	"E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E"},
 
 			{"E","E","E","E","E",	"a","2","2","2","2","2","2","2","2","7","2","2","2","2","2","2","2","2","b"},
 			{"E","E","E","E","E",	"1","0","0","0","0","0","0","0","0","1","0","0","0","0","0","0","0","0","1"},
@@ -60,12 +60,13 @@ public class Ventana extends JFrame{
 			{"E","E","E","E","E",	"1","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","1"},
 			{"E","E","E","E","E",	"c","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","d"},
 
-			{"E","E","E","E","E",	"E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E"},
+			{"E","E","E","E","E",	"V","V","V","E","E","E","E","E","E","E","E","E","E","E","E","E","F","F","F"},
 			{"E","E","E","E","E",	"E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E"},
 	};
 	public Ventana () {
 
 		pacman = new ImageIcon("imagenes/pacman.png").getImage();
+
 		imagenes.put("1", cargarImagen("imagenes/paredParada1.png"));
 		imagenes.put("2", cargarImagen("imagenes/paredAcostada1.png"));
 
@@ -92,6 +93,9 @@ public class Ventana extends JFrame{
 		imagenes.put("7", cargarImagen("imagenes/doble3.png"));
 		imagenes.put("8", cargarImagen("imagenes/doble4.png"));
 
+		imagenes.put("V", cargarImagen("imagenes/pacman.png"));
+		imagenes.put("F", cargarImagen("imagenes/fruta.png"));
+
 		//PROPIEDADES VENTANA
 		this.setTitle("Pacman");
 		this.setSize(600,600);
@@ -100,13 +104,36 @@ public class Ventana extends JFrame{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 
+		JPanel panelSuperior = new JPanel();
+		panelSuperior.setPreferredSize(new Dimension(getWidth(), 50));
+		panelSuperior.setLayout(new GridBagLayout());
+
+		JButton boton = new JButton("Salir");
+		boton.setPreferredSize(new Dimension(70, 20));
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.anchor = GridBagConstraints.WEST;
+		panelSuperior.add(boton, gbc);
+
+		JLabel etiqueta = new JLabel("SCORE: ");
+		etiqueta.setPreferredSize(new Dimension(100, 20));
+		gbc = new GridBagConstraints();
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.insets = new Insets(0, 100, 0, 100);
+		panelSuperior.add(etiqueta, gbc);
+
+		this.add(panelSuperior, BorderLayout.NORTH);
+
 		juego = new JPanel(new BorderLayout());
 		//juego.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		juego.setOpaque(true);
 		juego.setBackground(Color.decode("#eeeeee"));
 		juego.add(panel, BorderLayout.CENTER);
 
-		juego.add(new MiPanel());
+		juego.add(new dibujar());
 
 		this.add(juego, BorderLayout.CENTER);
 
@@ -144,9 +171,9 @@ public class Ventana extends JFrame{
 
 				colision();
 				tunel();
+
 				juego.repaint();
 				juego.revalidate();
-				//juego.repaint();
 			}
 
 
@@ -221,7 +248,7 @@ public class Ventana extends JFrame{
 		}
 	}
 
-	class MiPanel extends JPanel {
+	class dibujar extends JPanel {
 
 		public void paintComponent(Graphics g) {
 

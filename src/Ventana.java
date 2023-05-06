@@ -21,6 +21,8 @@ public class Ventana extends JFrame{
 	ArrayList<Rect> paredes = new ArrayList<Rect>();
 	ArrayList<Rect> comidas = new ArrayList<>();
 	ArrayList<Fantasma> fantasmas = new ArrayList<Fantasma>();
+	private Boolean llenoPuntos = true;
+	ArrayList<Rect> punto = new ArrayList<Rect>();
 
 	private HashMap<String, Image> imagenes = new HashMap<String, Image>();
 

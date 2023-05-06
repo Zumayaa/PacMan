@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Random;
 
 public class Ventana extends JFrame{
-	public int px=20;
-	public int py=20;
+	public int px=120;
+	public int py=60;
 	int anteriorPx, anteriorPy;
 	private Image pacman;
 	ArrayList<Rect> paredes = new ArrayList<Rect>();
@@ -24,37 +24,45 @@ public class Ventana extends JFrame{
 	private Boolean llenoPuntos = true;
 	public int puntos = 0;
 	ArrayList<Rect> punto = new ArrayList<Rect>();
+	JPanel panel = new JPanel();
+	JPanel juego = new JPanel();
 
 	private HashMap<String, Image> imagenes = new HashMap<String, Image>();
 
 	//LO CAMBIE A STRING PORQUE ME DI CUENTA QUE SE OCUPABAN MUCHOS DISEÑOS DE PAREDES :'V
 	private String[][] laberinto = {
-			{"1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"},
-			{"1","0","0","0","0","0","0","0","0","1","0","0","0","0","0","0","0","0","1"},
-			{"1","0","1","1","0","1","1","1","0","1","0","1","1","1","0","1","1","0","1"},
-			{"1","0","1","1","0","1","1","1","0","1","0","1","1","1","0","1","1","0","1"},
-			{"1","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","1"},
-			{"1","0","1","1","0","1","0","1","1","1","1","1","0","1","0","1","1","0","1"},
-			{"1","0","0","0","0","1","0","0","0","1","0","0","0","1","0","0","0","0","1"},
-			{"1","1","1","1","0","1","1","1","0","1","0","1","1","1","0","1","1","1","1"},
-			{"2","2","2","1","0","1","0","0","0","0","0","0","0","1","0","1","2","2","2"},
-			{"2","2","2","1","0","1","0","1","1","2","1","1","0","1","0","1","2","2","2"},
-			{"1","1","1","1","0","1","0","1","2","2","2","1","0","1","0","1","1","1","1"},
-			{"0","0","0","0","0","0","0","1","2","2","2","1","0","0","0","0","0","0","0"},
-			{"1","1","1","1","0","1","0","1","1","1","1","1","0","1","0","1","1","1","1"},
-			{"2","2","2","1","0","1","0","0","0","0","0","0","0","1","0","1","2","2","2"},
-			{"2","2","2","1","0","1","0","1","1","1","1","1","0","1","0","1","2","2","2"},
-			{"1","1","1","1","0","1","0","0","0","1","0","0","0","1","0","1","1","1","1"},
-			{"1","0","0","0","0","0","0","1","0","1","0","1","0","0","0","0","0","0","1"},
-			{"1","0","1","1","0","1","1","1","0","1","0","1","1","1","0","1","1","0","1"},
-			{"1","0","0","1","0","0","0","0","0","0","0","0","0","0","0","1","0","0","1"},
-			{"1","1","0","1","0","1","0","1","1","1","1","1","0","1","0","1","0","1","1"},
-			{"1","0","0","0","0","1","0","0","0","1","0","0","0","1","0","0","0","0","1"},
-			{"1","0","1","1","1","1","1","1","0","1","0","1","1","1","1","1","1","0","1"},
-			{"1","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","1"},
-			{"1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"},
+
+			{"2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2"},
+			{"2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2"},
+			{"2","2","2","2","2","a","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","b"},
+			{"2","2","2","2","2","1","0","0","0","0","0","0","0","0","1","0","0","0","0","0","0","0","0","1"},
+			{"2","2","2","2","2","1","0","1","1","0","1","1","1","0","1","0","1","1","1","0","1","1","0","1"},
+			{"2","2","2","2","2","1","0","1","1","0","1","1","1","0","1","0","1","1","1","0","1","1","0","1"},
+			{"2","2","2","2","2","1","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","1"},
+			{"2","2","2","2","2","1","0","1","1","0","1","0","1","1","1","1","1","0","1","0","1","1","0","1"},
+			{"2","2","2","2","2","1","0","0","0","0","1","0","0","0","1","0","0","0","1","0","0","0","0","1"},
+			{"2","2","2","2","2","1","1","1","1","0","1","1","1","0","1","0","1","1","1","0","1","1","1","1"},
+			{"2","2","2","2","2","2","2","2","1","0","1","0","0","0","0","0","0","0","1","0","1","2","2","2"},
+			{"2","2","2","2","2","2","2","2","1","0","1","0","1","1","2","1","1","0","1","0","1","2","2","2"},
+			{"2","2","2","2","2","1","1","1","1","0","1","0","1","2","2","2","1","0","1","0","1","1","1","1"},
+			{"2","2","2","2","2","0","0","0","0","0","0","0","1","2","2","2","1","0","0","0","0","0","0","0"},
+			{"2","2","2","2","2","1","1","1","1","0","1","0","1","1","1","1","1","0","1","0","1","1","1","1"},
+			{"2","2","2","2","2","2","2","2","1","0","1","0","0","0","0","0","0","0","1","0","1","2","2","2"},
+			{"2","2","2","2","2","2","2","2","1","0","1","0","1","1","1","1","1","0","1","0","1","2","2","2"},
+			{"2","2","2","2","2","1","1","1","1","0","1","0","0","0","1","0","0","0","1","0","1","1","1","1"},
+			{"2","2","2","2","2","1","0","0","0","0","0","0","1","0","1","0","1","0","0","0","0","0","0","1"},
+			{"2","2","2","2","2","1","0","1","1","0","1","1","1","0","1","0","1","1","1","0","1","1","0","1"},
+			{"2","2","2","2","2","1","0","0","1","0","0","0","0","0","0","0","0","0","0","0","1","0","0","1"},
+			{"2","2","2","2","2","1","1","0","1","0","1","0","1","1","1","1","1","0","1","0","1","0","1","1"},
+			{"2","2","2","2","2","1","0","0","0","0","1","0","0","0","1","0","0","0","1","0","0","0","0","1"},
+			{"2","2","2","2","2","1","0","1","1","1","1","1","1","0","1","0","1","1","1","1","1","1","0","1"},
+			{"2","2","2","2","2","1","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","1"},
+			{"2","2","2","2","2","c","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","d"},
+			{"2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2"},
+			{"2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2"},
 	};
-	public Ventana() {
+	public Ventana () {
+
 		pacman = new ImageIcon("imagenes/pacman.png").getImage();
 		imagenes.put("1", cargarImagen("imagenes/pared.png"));
 
@@ -67,12 +75,10 @@ public class Ventana extends JFrame{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 
-		JPanel panel = new JPanel();
-		panel.setBackground(Color.black);
-
-		JPanel juego = new JPanel(new BorderLayout());
-		juego.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-		juego.setBackground(Color.decode("#c6dee9"));
+		juego = new JPanel(new BorderLayout());
+		//juego.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		juego.setOpaque(true);
+		juego.setBackground(Color.decode("#eeeeee"));
 		juego.add(panel, BorderLayout.CENTER);
 
 		juego.add(new MiPanel());
@@ -101,7 +107,7 @@ public class Ventana extends JFrame{
 					py = py - 5;
 					colision();
 				}
-				if(e.getKeyCode() == 83 && py < 460) {
+				if(e.getKeyCode() == 83 && py < 500) {
 					py = py + 5;
 					colision();
 				}
@@ -109,7 +115,7 @@ public class Ventana extends JFrame{
 					px = px - 5;
 					colision();
 				}
-				if(e.getKeyCode() == 68 && px < 460) {
+				if(e.getKeyCode() == 68 && px < 500) {
 					px = px + 5;
 					colision();
 				}
@@ -133,9 +139,9 @@ public class Ventana extends JFrame{
 
 
 		//Se crean los fantasmas y se añaden
-		Fantasma fantasma1 = new Fantasma(160, 160, 20, 20, Color.red, paredes);
-		Fantasma fantasma2 = new Fantasma(180, 180, 20, 20, Color.pink, paredes);
-		Fantasma fantasma3 = new Fantasma(160, 220, 20, 20, Color.cyan, paredes);
+		Fantasma fantasma1 = new Fantasma(180, 180, 20, 20, Color.red, paredes);
+		Fantasma fantasma2 = new Fantasma(180, 190, 20, 20, Color.pink, paredes);
+		Fantasma fantasma3 = new Fantasma(180, 220, 20, 20, Color.cyan, paredes);
 		Fantasma fantasma4 = new Fantasma(180, 200, 20, 20, Color.orange, paredes);
 
 		fantasmas.add(fantasma1);
@@ -144,23 +150,23 @@ public class Ventana extends JFrame{
 		fantasmas.add(fantasma4);
 
 		//Hilo para mover los fantasmas aunque el jugador no este haciendo nada
-	    Object bloqueo = new Object(); // Crear un objeto de bloqueo para cada instancia de Fantasma
+		Object bloqueo = new Object(); // Crear un objeto de bloqueo para cada instancia de Fantasma
 		for (Fantasma f : fantasmas) {
-		    Thread t = new Thread(() -> {
-		        while (true) {
-		            synchronized (bloqueo) { // Obtener el bloqueo correspondiente a la instancia actual de Fantasma
-		                f.mover();
-		            }
-		            juego.repaint();
-		            try {
-		                Thread.sleep(70); // Espera 70 milisegundos antes de mover el fantasma nuevamente
-		            } catch (InterruptedException e) {
-		                e.printStackTrace();
-		            }
-		        }
-		    });
+			Thread t = new Thread(() -> {
+				while (true) {
+					synchronized (bloqueo) { // Obtener el bloqueo correspondiente a la instancia actual de Fantasma
+						f.mover();
+					}
+					juego.repaint();
+					try {
+						Thread.sleep(70); // Espera 70 milisegundos antes de mover el fantasma nuevamente
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			});
 
-		    t.start();
+			t.start();
 		}
 
 	}
@@ -182,7 +188,10 @@ public class Ventana extends JFrame{
 	class MiPanel extends JPanel {
 
 		public void paintComponent(Graphics g) {
+
 			super.paintComponent(g);
+
+			setBackground(Color.BLACK);
 
 			//JUGADOR
 			Rect r = new Rect(px, py, 20, 20, Color.yellow);
@@ -219,16 +228,16 @@ public class Ventana extends JFrame{
 			Rect p1 = new Rect(20, 40, 20, 20, Color.red);
 			g.setColor(p1.c);
 			g.fillRect(p1.x, p1.y, p1.w, p1.h);
-			
+
 			if(llenoPuntos) {
 				punto.add(p1);
-				
+
 				llenoPuntos = false;
 			}
-			
+
 			for(int i = 0; i< punto.size();i++) {
 				if(r.colision(punto.get(i))) {
-					
+
 					punto.remove(i);
 					puntos++;
 					System.out.println("PUNTOSSSSSSSSSSSSSSSSSSSSSSS: " + puntos);
@@ -237,7 +246,7 @@ public class Ventana extends JFrame{
 
 
 
-	//Esto de aqui muestra a los fantasmas y los mueve
+			//Esto de aqui muestra a los fantasmas y los mueve
 			if (fantasmas != null) {
 				for (Fantasma f : fantasmas) {
 					f.mover();
@@ -336,56 +345,56 @@ public class Ventana extends JFrame{
 			g.fillRect(x, y, 20, 20);
 		}
 		public void mover() {
-		    synchronized (this) { // Obtener el bloqueo del objeto
-		        int newX = x + dirX;
-		        int newY = y + dirY;
+			synchronized (this) { // Obtener el bloqueo del objeto
+				int newX = x + dirX;
+				int newY = y + dirY;
 
-		        if (!hayColision(dirX, dirY)) {
-		            x = newX;
-		            y = newY;
+				if (!hayColision(dirX, dirY)) {
+					x = newX;
+					y = newY;
 
-		        } else {
-		            int intentos = 0;
-		            while (intentos < 20) { // intenta varias veces encontrar una dirección sin colisión
-		                int rand = (int) (Math.random() * 4); // elige una dirección aleatoria
-		                switch (rand) {
-		                    case 0:
-		                        dirX = -1;
-		                        dirY = 0;
-		                        break;
-		                    case 1:
-		                        dirX = 1;
-		                        dirY = 0;
-		                        break;
-		                    case 2:
-		                        dirX = 0;
-		                        dirY = -1;
-		                        break;
-		                    case 3:
-		                        dirX = 0;
-		                        dirY = 1;
-		                        break;
-		                }
-		                if (!hayColision(dirX, dirY)) { // verifica si la nueva dirección no tiene colisión
-		                    x += dirX;
-		                    y += dirY;
-		                    break;
-		                }
-		                intentos++;
-		            }
-		        }
-		    }
+				} else {
+					int intentos = 0;
+					while (intentos < 20) { // intenta varias veces encontrar una dirección sin colisión
+						int rand = (int) (Math.random() * 4); // elige una dirección aleatoria
+						switch (rand) {
+							case 0:
+								dirX = -1;
+								dirY = 0;
+								break;
+							case 1:
+								dirX = 1;
+								dirY = 0;
+								break;
+							case 2:
+								dirX = 0;
+								dirY = -1;
+								break;
+							case 3:
+								dirX = 0;
+								dirY = 1;
+								break;
+						}
+						if (!hayColision(dirX, dirY)) { // verifica si la nueva dirección no tiene colisión
+							x += dirX;
+							y += dirY;
+							break;
+						}
+						intentos++;
+					}
+				}
+			}
 		}
 		//Se crea un metodo que verifique si hay una colision con las paredes con el método de la colision ya antes escrita
 		public boolean hayColision(int dirX, int dirY) {
-		    List<Rect> copiaParedes = new ArrayList<>(paredes);
-		    for (Rect pared : copiaParedes) {
-		        Rect futuro = new Rect(x + dirX, y + dirY, w, h, null);
-		        if (futuro.colision(pared)) {
-		            return true;
-		        }
-		    }
-		    return false;
+			List<Rect> copiaParedes = new ArrayList<>(paredes);
+			for (Rect pared : copiaParedes) {
+				Rect futuro = new Rect(x + dirX, y + dirY, w, h, null);
+				if (futuro.colision(pared)) {
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 }

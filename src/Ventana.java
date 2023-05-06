@@ -39,7 +39,7 @@ public class Ventana extends JFrame{
 			{"E","E","E","E","E",	"1","0","0","0","0","0","0","0","0","1","0","0","0","0","0","0","0","0","1"},
 			{"E","E","E","E","E",	"1","0","e","f","0","e","i","f","0","1","0","e","i","f","0","e","f","0","1"},
 			{"E","E","E","E","E",	"1","0","g","h","0","g","j","h","0","u","0","g","j","h","0","g","h","0","1"},
-			{"E","E","E","E","E",	"1","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","1"},
+			{"E","E","E","E","E",	"1","P","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","1"},
 			{"E","E","E","E","E",	"1","0","3","4","0","n","0","3","2","7","2","4","0","n","0","3","4","0","1"},
 			{"E","E","E","E","E",	"1","0","0","0","0","1","0","0","0","1","0","0","0","1","0","0","0","0","1"},
 			{"E","E","E","E","E",	"c","2","2","b","0","5","2","4","0","u","0","3","2","6","0","a","2","2","d"},
@@ -234,6 +234,15 @@ public class Ventana extends JFrame{
 				break;
 			}
 		}
+		
+		for(Rect p : punto) {
+			if(r.colision(p)) {
+				puntos++;
+				System.out.println("PUNTOSSSSSSS" + puntos);
+				
+				break;
+			}
+		}
 	}
 
 	public void tunel() {
@@ -281,6 +290,13 @@ public class Ventana extends JFrame{
 						Rect pared = new Rect(j * 20, i * 20, 20, 20, Colores.colorParedes);
 						paredes.add(pared);
 					}
+					
+					if(letra.equals("P")) {
+						Rect p = new Rect(j * 20, i * 20, 20, 20, Color.red);
+						g.setColor(p.c);
+						g.fillRect(p.x,p.y,p.w,p.h);
+						punto.add(p);
+					}
 				}
 			}
 
@@ -289,26 +305,6 @@ public class Ventana extends JFrame{
 	            g.setColor(c.c);
 	            g.fillRect(c.x, c.y, c.w, c.h);
 	        }*/
-
-			Rect p1 = new Rect(20, 40, 20, 20, Color.red);
-			g.setColor(p1.c);
-			g.fillRect(p1.x, p1.y, p1.w, p1.h);
-
-			if(llenoPuntos) {
-				punto.add(p1);
-
-				llenoPuntos = false;
-			}
-
-			for(int i = 0; i< punto.size();i++) {
-				if(r.colision(punto.get(i))) {
-
-					punto.remove(i);
-					puntos++;
-					//System.out.println("PUNTOSSSSSSSSSSSSSSSSSSSSSSS: " + puntos);
-				}
-			}
-
 
 
 			//Esto de aqui muestra a los fantasmas y los mueve

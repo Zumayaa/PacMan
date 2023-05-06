@@ -22,6 +22,7 @@ public class Ventana extends JFrame{
 	ArrayList<Rect> comidas = new ArrayList<>();
 	ArrayList<Fantasma> fantasmas = new ArrayList<Fantasma>();
 	private Boolean llenoPuntos = true;
+	public int puntos = 0;
 	ArrayList<Rect> punto = new ArrayList<Rect>();
 
 	private HashMap<String, Image> imagenes = new HashMap<String, Image>();
@@ -215,8 +216,24 @@ public class Ventana extends JFrame{
 	            g.fillRect(c.x, c.y, c.w, c.h);
 	        }*/
 
-
-
+			Rect p1 = new Rect(20, 40, 20, 20, Color.red);
+			g.setColor(p1.c);
+			g.fillRect(p1.x, p1.y, p1.w, p1.h);
+			
+			if(llenoPuntos) {
+				punto.add(p1);
+				
+				llenoPuntos = false;
+			}
+			
+			for(int i = 0; i< punto.size();i++) {
+				if(r.colision(punto.get(i))) {
+					
+					punto.remove(i);
+					puntos++;
+					System.out.println("PUNTOSSSSSSSSSSSSSSSSSSSSSSS: " + puntos);
+				}
+			}
 
 
 

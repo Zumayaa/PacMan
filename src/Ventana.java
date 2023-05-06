@@ -46,7 +46,7 @@ public class Ventana extends JFrame{
 			{"E","E","E","E","E",	"E","E","E","1","0","1","0","0","0","0","0","0","0","1","0","1","E","E","E"},
 			{"E","E","E","E","E",	"E","E","E","1","0","1","0","a","4","E","3","b","0","1","0","1","E","E","E"},
 			{"E","E","E","E","E",	"3","2","2","d","0","u","0","1","E","E","E","1","0","u","0","c","2","2","4"},
-			{"E","E","E","E","E",	"0","0","0","0","0","0","0","1","E","E","E","1","0","0","0","0","0","0","0"},
+			{"E","E","E","E","E",	"X","0","0","0","0","0","0","1","E","E","E","1","0","0","0","0","0","0","X"},
 			{"E","E","E","E","E",	"3","2","2","b","0","n","0","c","2","2","2","d","0","n","0","a","2","2","4"},
 			{"E","E","E","E","E",	"E","E","E","1","0","1","0","0","0","0","0","0","0","1","0","1","E","E","E"},
 			{"E","E","E","E","E",	"E","E","E","1","0","1","0","3","2","7","2","4","0","1","0","1","E","E","E"},
@@ -123,28 +123,27 @@ public class Ventana extends JFrame{
 			@Override
 			public void keyPressed(KeyEvent e) {
 				// TODO Auto-generated method stub
-				System.out.println(e.getKeyCode());
+				//System.out.println(e.getKeyCode());
 
 				anteriorPx = px;
 				anteriorPy = py;
 
 				if(e.getKeyCode() == 87 && py > 0) {
 					py = py - 5;
-					colision();
 				}
 				if(e.getKeyCode() == 83 && py < 500) {
 					py = py + 5;
-					colision();
 				}
 				if(e.getKeyCode() == 65 && px > 0) {
 					px = px - 5;
-					colision();
 				}
 				if(e.getKeyCode() == 68 && px < 500) {
 					px = px + 5;
-					colision();
+
 				}
 
+				colision();
+				tunel();
 				juego.repaint();
 				juego.revalidate();
 				//juego.repaint();
@@ -210,6 +209,18 @@ public class Ventana extends JFrame{
 		}
 	}
 
+	public void tunel() {
+
+		System.out.println(px+","+py);
+		if(px == 105 && py == 260) {
+			px = 455;
+			py = 260;
+		}else if(px == 455 && py == 260) {
+			px = 105;
+			py = 260;
+		}
+	}
+
 	class MiPanel extends JPanel {
 
 		public void paintComponent(Graphics g) {
@@ -267,7 +278,7 @@ public class Ventana extends JFrame{
 
 					punto.remove(i);
 					puntos++;
-					System.out.println("PUNTOSSSSSSSSSSSSSSSSSSSSSSS: " + puntos);
+					//System.out.println("PUNTOSSSSSSSSSSSSSSSSSSSSSSS: " + puntos);
 				}
 			}
 

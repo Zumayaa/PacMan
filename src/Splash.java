@@ -143,6 +143,36 @@ public class Splash extends JDialog {
             attack.setBounds(50,200,500,300);
             add(attack);
             
+            JLabel point4 = new JLabel("");
+            point4.setSize(23,23);
+            point4.setLocation(19,338);
+            ImageIcon point4img = new ImageIcon("imagenes/naranja.png");
+            Icon iconoPoint4 = new ImageIcon(point4img.getImage().getScaledInstance(point4.getWidth(), point4.getHeight(), Image.SCALE_DEFAULT));
+            point4.setIcon(iconoPoint4);
+            add(point4);
+            
+            JLabel fruit = new JLabel("Come las frutas para puntos extra!");
+            fruit.setForeground(Color.yellow);
+            fruit.setFont(new Font("Tahoma", Font.PLAIN,18));
+            fruit.setBounds(50,250,500,300);
+            add(fruit);
+            
+            JLabel point5 = new JLabel("");
+            point5.setSize(23,23);
+            point5.setLocation(19,390);
+            ImageIcon point5img = new ImageIcon("imagenes/fruta.png");
+            Icon iconoPoint5 = new ImageIcon(point5img.getImage().getScaledInstance(point5.getWidth(), point5.getHeight(), Image.SCALE_DEFAULT));
+            point5.setIcon(iconoPoint5);
+            add(point5);
+            
+            JLabel eatin = new JLabel("");
+            eatin.setSize(50,50);
+            eatin.setLocation(320,370);
+            ImageIcon eatingif = new ImageIcon("imagenes/fruit.gif");
+            Icon iconoeatin = new ImageIcon(eatingif.getImage().getScaledInstance(eatin.getWidth(), eatin.getHeight(), Image.SCALE_DEFAULT));
+            eatin.setIcon(iconoeatin);
+            add(eatin);  
+            
             JLabel attackin = new JLabel("");
             attackin.setSize(50,50);
             attackin.setLocation(290,319);
@@ -159,9 +189,13 @@ public class Splash extends JDialog {
             evadeDescription.setIcon(icono);
             add(evadeDescription);     
 
-            JButton atras = new JButton("Regresar al menú");
-            atras.setFont(new Font("Tahoma", Font.PLAIN,18));
-            atras.setBounds(200,450,50,50);
+            ParpadeoBoton atras = new ParpadeoBoton("Regresar al menú");
+            atras.setFont(new Font("Tahoma", Font.PLAIN, 18));
+            atras.setBounds(150, 500, 300, 40);
+            
+            Timer temporizador = new Timer(500, atras);
+            temporizador.start();
+            
             atras.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     dispose(); // cerrar la ventana actual
@@ -169,6 +203,7 @@ public class Splash extends JDialog {
             });
 
             add(atras);
+        
         }
     }
 
@@ -185,11 +220,12 @@ public class Splash extends JDialog {
             JLabel label = new JLabel("Aquí va la información");
             label.setFont(new Font("Tahoma", Font.PLAIN,18));
             label.setBounds(50,50,300,100);
-            add(label);
+            add(label);    
 
             JButton atras = new JButton("Regresar al menú");
             atras.setFont(new Font("Tahoma", Font.PLAIN,18));
             atras.setBounds(200,310,200,200);
+            
             atras.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     dispose(); // cerrar la ventana actual

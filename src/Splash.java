@@ -11,7 +11,7 @@ public class Splash extends JDialog {
     //PROPIEDADES DIALOOGO
     public Splash() {
         inicio();
-        setSize(600,600);
+        setSize(452,600);
         setLocationRelativeTo(null);
         getContentPane().setLayout(null);
         setUndecorated(true);
@@ -23,23 +23,24 @@ public class Splash extends JDialog {
     private void inicio() {
 
         //Imagen de fondo
-        ImageIcon imagen = new ImageIcon("");
+        ImageIcon imagen = new ImageIcon("imagenes/pantallaDeCarga3.png");
         // Crea el objeto JLabel
         JLabel etiqueta = new JLabel(imagen);
 
         // Agrega la etiqueta al panel
-        etiqueta.setSize(600, 600);
+        etiqueta.setSize(452, 600);
         etiqueta.setLocation(0, 0);
 
         barra = new JProgressBar();
-        barra.setBounds(154,397,294,22);
+        barra.setBounds(109,473,231,26);
         barra.setOpaque(true);
-        barra.setForeground(Color.decode("#3E4532"));
+        barra.setForeground(Color.decode("#EF8200"));
         getContentPane().add(barra);
 
         l2 = new JLabel();
         l2.setFont(new Font("Tahoma", Font.PLAIN,18));
-        l2.setBounds(260,310,300,300);
+        l2.setBounds(180,511,90,30);
+        l2.setForeground(Color.decode("#EF8200"));
         getContentPane().add(l2);
 
         getContentPane().add(etiqueta);
@@ -106,7 +107,7 @@ public class Splash extends JDialog {
 
         public InformacionVentana() {
             super("About us"); // título de la ventana
-            setSize(600, 600); // tamaño de la ventana
+            setSize(452, 600); // tamaño de la ventana
 
             setLocationRelativeTo(null);
             getContentPane().setLayout(null);
@@ -141,7 +142,7 @@ public class Splash extends JDialog {
                     while (x <= 100) {
                         barra.setValue(x);
                         x++;
-                        Thread.sleep(10);
+                        Thread.sleep(50);
 
                         if (x == 5) {
                             texto = "Cargando...";

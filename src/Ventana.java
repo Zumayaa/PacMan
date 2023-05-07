@@ -23,7 +23,7 @@ public class Ventana extends JFrame{
 	ArrayList<Rect> paredes = new ArrayList<Rect>();
 	ArrayList<Rect> comidas = new ArrayList<>();
 	ArrayList<Fantasma> fantasmas = new ArrayList<Fantasma>();
-	private Boolean llenoPuntos = true;
+	
 	public int puntos = 0;
 	ArrayList<Rect> punto = new ArrayList<Rect>();
 	JPanel panel = new JPanel();
@@ -240,8 +240,9 @@ public class Ventana extends JFrame{
 		    if (r.colision(p)) {
 		        puntos++;
 		        System.out.println("PUNTOSSSSSSS" + puntos);
-		        punto.remove(i);
-		        i--;
+		        Rect comido = new Rect(6000, 6000, 1,1,Color.black);
+		        punto.set(i, comido);
+		        
 		        juego.repaint();
 		        break;
 		    }
@@ -274,6 +275,8 @@ public class Ventana extends JFrame{
 			g.setColor(r.c);
 			g.fillRect(r.x, r.y, r.w, r.h);
 			g.drawImage(pacman, px, py, this);
+			
+			
 
 			//PAREDES
 			for(int i = 0; i < laberinto.length; i++) {

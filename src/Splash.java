@@ -11,7 +11,7 @@ public class Splash extends JDialog {
     //PROPIEDADES DIALOOGO
     public Splash() {
         inicio();
-        setSize(600,600);
+        setSize(452,600);
         setLocationRelativeTo(null);
         getContentPane().setLayout(null);
         setUndecorated(true);
@@ -23,24 +23,25 @@ public class Splash extends JDialog {
     private void inicio() {
 
         //Imagen de fondo
-        ImageIcon imagen = new ImageIcon("");
+        ImageIcon imagen = new ImageIcon("imagenes/pantallaDeCarga3.png");
         // Crea el objeto JLabel
         JLabel etiqueta = new JLabel(imagen);
 
         // Agrega la etiqueta al panel
-        etiqueta.setSize(600, 600);
+        etiqueta.setSize(452, 600);
         etiqueta.setLocation(0, 0);
 
         barra = new JProgressBar();
-        barra.setBounds(154,397,294,22);
+        barra.setBounds(109,473,231,26);
         barra.setOpaque(true);
-        barra.setForeground(Color.decode("#3E4532"));
+        barra.setForeground(Color.decode("#EF8200"));
         getContentPane().add(barra);
         
 
         l2 = new JLabel();
         l2.setFont(new Font("Tahoma", Font.PLAIN,18));
-        l2.setBounds(260,310,300,300);
+        l2.setBounds(180,511,90,30);
+        l2.setForeground(Color.decode("#EF8200"));
         getContentPane().add(l2);
 
         getContentPane().add(etiqueta);
@@ -84,15 +85,83 @@ public class Splash extends JDialog {
             setLocationRelativeTo(null);
             getContentPane().setLayout(null);
             setUndecorated(true);
+            getContentPane().setBackground(Color.black);
 
-            JLabel label = new JLabel("Aquí van las instrucciones");
-            label.setFont(new Font("Tahoma", Font.PLAIN,18));
-            label.setBounds(50,50,300,100);
+            JLabel label = new JLabel("INSTRUCCIONES");
+            label.setForeground(Color.yellow);
+            label.setFont(new Font("Tahoma", Font.PLAIN,30));
+            label.setBounds(180,30,500,100);
             add(label);
+            
+            JLabel evadeTitle = new JLabel("Evade a los fantasmas!");
+            evadeTitle.setForeground(Color.yellow);
+            evadeTitle.setFont(new Font("Tahoma", Font.PLAIN,18));
+            evadeTitle.setBounds(50,50,300,300);
+            add(evadeTitle);
+            
+             
+            
+            JLabel point1 = new JLabel("");
+            point1.setSize(20,20);
+            point1.setLocation(20,190);
+            ImageIcon point1img = new ImageIcon("imagenes/rojo.png");
+            Icon iconoPoint1 = new ImageIcon(point1img.getImage().getScaledInstance(point1.getWidth(), point1.getHeight(), Image.SCALE_DEFAULT));
+            point1.setIcon(iconoPoint1);
+            add(point1);
+            
+            JLabel consigue = new JLabel("Consigue todos los puntos para ganar!");
+            consigue.setForeground(Color.yellow);
+            consigue.setFont(new Font("Tahoma", Font.PLAIN,18));
+            consigue.setBounds(50,100,500,300);
+            add(consigue);
+            
+            JLabel point2 = new JLabel("");
+            point2.setSize(23,23);
+            point2.setLocation(19,240);
+            ImageIcon point2img = new ImageIcon("imagenes/rosa.png");
+            Icon iconoPoint2 = new ImageIcon(point2img.getImage().getScaledInstance(point2.getWidth(), point2.getHeight(), Image.SCALE_DEFAULT));
+            point2.setIcon(iconoPoint2);
+            add(point2);
+              
+            JLabel energizarte = new JLabel("Come los puntos grandes para poder energizarte!");
+            energizarte.setForeground(Color.yellow);
+            energizarte.setFont(new Font("Tahoma", Font.PLAIN,18));
+            energizarte.setBounds(50,150,500,300);
+            add(energizarte);
+            
+            JLabel point3 = new JLabel("");
+            point3.setSize(23,23);
+            point3.setLocation(19,287);
+            ImageIcon point3img = new ImageIcon("imagenes/cyan.png");
+            Icon iconoPoint3 = new ImageIcon(point3img.getImage().getScaledInstance(point3.getWidth(), point3.getHeight(), Image.SCALE_DEFAULT));
+            point3.setIcon(iconoPoint3);
+            add(point3);
+            
+            JLabel attack = new JLabel("Después de energizarte, ataca!");
+            attack.setForeground(Color.yellow);
+            attack.setFont(new Font("Tahoma", Font.PLAIN,18));
+            attack.setBounds(50,200,500,300);
+            add(attack);
+            
+            JLabel attackin = new JLabel("");
+            attackin.setSize(50,50);
+            attackin.setLocation(290,319);
+            ImageIcon attackingif = new ImageIcon("imagenes/attack.gif");
+            Icon iconoattackin = new ImageIcon(attackingif.getImage().getScaledInstance(attackin.getWidth(), attackin.getHeight(), Image.SCALE_DEFAULT));
+            attackin.setIcon(iconoattackin);
+            add(attackin);   
+            
+            JLabel evadeDescription = new JLabel("");
+            evadeDescription.setSize(200,100);
+            evadeDescription.setLocation(240,150);
+            ImageIcon gif = new ImageIcon("imagenes/evade.gif");
+            Icon icono = new ImageIcon(gif.getImage().getScaledInstance(evadeDescription.getWidth(), evadeDescription.getHeight(), Image.SCALE_DEFAULT));
+            evadeDescription.setIcon(icono);
+            add(evadeDescription);     
 
             JButton atras = new JButton("Regresar al menú");
             atras.setFont(new Font("Tahoma", Font.PLAIN,18));
-            atras.setBounds(200,310,200,200);
+            atras.setBounds(200,450,50,50);
             atras.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     dispose(); // cerrar la ventana actual
@@ -107,7 +176,7 @@ public class Splash extends JDialog {
 
         public InformacionVentana() {
             super("About us"); // título de la ventana
-            setSize(600, 600); // tamaño de la ventana
+            setSize(452, 600); // tamaño de la ventana
 
             setLocationRelativeTo(null);
             getContentPane().setLayout(null);
@@ -133,7 +202,8 @@ public class Splash extends JDialog {
 
     private void inicioHilo() {
         Thread hilo = new Thread(new Runnable() {
-            int x = 0;
+        	//Cambié el valor porque va demasiado lento
+            int x = 100;
             String texto = " ";
 
             public void run() {
@@ -142,7 +212,7 @@ public class Splash extends JDialog {
                     while (x <= 100) {
                         barra.setValue(x);
                         x++;
-                        Thread.sleep(10);
+                        Thread.sleep(50);
 
                         if (x == 5) {
                             texto = "Cargando...";
@@ -153,7 +223,12 @@ public class Splash extends JDialog {
                         }
                     }
 
+                    ImageIcon imagen = new ImageIcon("imagenes/pruebaAllegro.png");
+                    // Crea el objeto JLabel
+                    JLabel etiqueta = new JLabel(imagen);
 
+                    etiqueta.setSize(452, 600);
+                    etiqueta.setLocation(0, 0);
 
                     ParpadeoBoton play = new ParpadeoBoton("PLAY     >");
                     play.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -172,20 +247,14 @@ public class Splash extends JDialog {
                     salir.setBounds(240, 525, 140, 25);
 
                     getContentPane().removeAll();
-                    getContentPane().setBackground(Color.black);
                     
-                    JLabel title = new JLabel(new ImageIcon());
-                   	title.setSize(400,300);
-                   	title.setLocation(100,-20);
-                   	ImageIcon titleImage = new ImageIcon("imagenes/title.png");
-                   	Icon iconTitle = new ImageIcon(titleImage.getImage().getScaledInstance(title.getWidth(), title.getHeight(), Image.SCALE_DEFAULT));
-                   	title.setIcon(iconTitle);
-                   	getContentPane().add(title);
-                   	
+
                     getContentPane().add(play);
                     getContentPane().add(instrucciones);
                     getContentPane().add(equipo);
                     getContentPane().add(salir);
+
+                    getContentPane().add(etiqueta);
 
                     revalidate();
                     repaint();

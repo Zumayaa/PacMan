@@ -28,7 +28,6 @@ public class Ventana extends JFrame{
 	ArrayList<Rect> punto = new ArrayList<Rect>();
 	JPanel panel = new JPanel();
 	JPanel juego = new JPanel();
-	public Rect puntox= new Rect(6000, 6000, 0, 0, Color.decode("#FFFFFF"));
 	private HashMap<String, Image> imagenes = new HashMap<String, Image>();
 
 
@@ -315,7 +314,6 @@ public class Ventana extends JFrame{
 						Rect pared = new Rect(j * 20, i * 20, 20, 20, Colores.colorParedes);
 						paredes.add(pared);
 					}
-					Rect pointer = new Rect(120,20,20,20,Color.black);
 					
 					Rect point = new Rect(120,20,20,20,Color.red);
 					g.setColor(point.c);

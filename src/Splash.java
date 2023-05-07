@@ -36,6 +36,7 @@ public class Splash extends JDialog {
         barra.setOpaque(true);
         barra.setForeground(Color.decode("#3E4532"));
         getContentPane().add(barra);
+        
 
         l2 = new JLabel();
         l2.setFont(new Font("Tahoma", Font.PLAIN,18));
@@ -171,7 +172,16 @@ public class Splash extends JDialog {
                     salir.setBounds(240, 525, 140, 25);
 
                     getContentPane().removeAll();
-
+                    getContentPane().setBackground(Color.black);
+                    
+                    JLabel title = new JLabel(new ImageIcon());
+                   	title.setSize(400,300);
+                   	title.setLocation(100,-20);
+                   	ImageIcon titleImage = new ImageIcon("imagenes/title.png");
+                   	Icon iconTitle = new ImageIcon(titleImage.getImage().getScaledInstance(title.getWidth(), title.getHeight(), Image.SCALE_DEFAULT));
+                   	title.setIcon(iconTitle);
+                   	getContentPane().add(title);
+                   	
                     getContentPane().add(play);
                     getContentPane().add(instrucciones);
                     getContentPane().add(equipo);

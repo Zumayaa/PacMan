@@ -28,7 +28,7 @@ public class Ventana extends JFrame{
 	ArrayList<Rect> punto = new ArrayList<Rect>();
 	JPanel panel = new JPanel();
 	JPanel juego = new JPanel();
-
+	public Rect puntox= new Rect(6000, 6000, 0, 0, Color.decode("#FFFFFF"));
 	private HashMap<String, Image> imagenes = new HashMap<String, Image>();
 
 
@@ -39,7 +39,7 @@ public class Ventana extends JFrame{
 			{"E","E","E","E","E",	"1","0","0","0","0","0","0","0","0","1","0","0","0","0","0","0","0","0","1"},
 			{"E","E","E","E","E",	"1","0","e","f","0","e","i","f","0","1","0","e","i","f","0","e","f","0","1"},
 			{"E","E","E","E","E",	"1","0","g","h","0","g","j","h","0","u","0","g","j","h","0","g","h","0","1"},
-			{"E","E","E","E","E",	"1","P","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","1"},
+			{"E","E","E","E","E",	"1","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","1"},
 			{"E","E","E","E","E",	"1","0","r","t","0","s","0","r","l","y","l","t","0","s","0","r","t","0","1"},
 			{"E","E","E","E","E",	"1","0","0","0","0","k","0","0","0","k","0","0","0","k","0","0","0","0","1"},
 			{"E","E","E","E","E",	"c","2","2","b","0","x","l","t","0","v","0","r","l","z","0","a","2","2","d"},
@@ -258,8 +258,8 @@ public class Ventana extends JFrame{
 		    if (r.colision(p)) {
 		        puntos++;
 		        System.out.println("PUNTOSSSSSSS" + puntos);
-		        Rect comido = new Rect(6000, 6000, 1,1,Color.black);
-		        punto.set(i, comido);
+		        punto.remove(p);
+		        
 		        
 		        juego.repaint();
 		        break;
@@ -315,12 +315,15 @@ public class Ventana extends JFrame{
 						Rect pared = new Rect(j * 20, i * 20, 20, 20, Colores.colorParedes);
 						paredes.add(pared);
 					}
+					Rect pointer = new Rect(120,20,20,20,Color.black);
 					
-					if(letra.equals("P")) {
-						Rect p = new Rect(j * 20, i * 20, 20, 20, Color.red);
-						g.setColor(p.c);
-						g.fillRect(p.x,p.y,p.w,p.h);
-						punto.add(p);
+					Rect point = new Rect(120,20,20,20,Color.red);
+					g.setColor(point.c);
+					g.fillRect(point.x, point.y, point.w, point.h);
+					
+					if(r.colision(point)) {
+						g.setColor(Color.black);
+						juego.repaint();
 					}
 				}
 			}

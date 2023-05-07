@@ -114,6 +114,9 @@ public class Ventana extends JFrame{
 		imagenes.put("V", cargarImagen("imagenes/pacman.png"));
 		imagenes.put("F", cargarImagen("imagenes/fruta.png"));
 
+		imagenes.put("0", cargarImagen("imagenes/comida.png"));
+		imagenes.put("X", cargarImagen("imagenes/comida.png"));
+
 		//PROPIEDADES VENTANA
 		this.setTitle("Pacman");
 		this.setSize(600,600);
@@ -288,12 +291,6 @@ public class Ventana extends JFrame{
 
 			setBackground(Color.BLACK);
 
-			//JUGADOR
-			Rect r = new Rect(px, py, 20, 20, Color.yellow);
-			g.setColor(r.c);
-			g.fillRect(r.x, r.y, r.w, r.h);
-			g.drawImage(pacman, px, py, this);
-
 			//PAREDES
 			for(int i = 0; i < laberinto.length; i++) {
 				for(int j = 0; j < laberinto[i].length; j++) {
@@ -322,7 +319,16 @@ public class Ventana extends JFrame{
 						g.fillRect(p.x,p.y,p.w,p.h);
 						punto.add(p);
 					}
+					if(letra.equals("0") || letra.equals("X")) {
+						Rect comida = new Rect(j * 20, i * 20, 20, 20, Color.red);
+						comidas.add(comida);
+					}
 				}
+				//JUGADOR
+				Rect r = new Rect(px, py, 20, 20, Color.yellow);
+				g.setColor(r.c);
+				g.fillRect(r.x, r.y, r.w, r.h);
+				g.drawImage(pacman, px, py, this);
 			}
 
 			//COMIDA

@@ -153,7 +153,12 @@ public class Splash extends JDialog {
                         }
                     }
 
+                    ImageIcon imagen = new ImageIcon("imagenes/pruebaAllegro.png");
+                    // Crea el objeto JLabel
+                    JLabel etiqueta = new JLabel(imagen);
 
+                    etiqueta.setSize(452, 600);
+                    etiqueta.setLocation(0, 0);
 
                     ParpadeoBoton play = new ParpadeoBoton("PLAY     >");
                     play.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -172,11 +177,12 @@ public class Splash extends JDialog {
                     salir.setBounds(240, 525, 140, 25);
 
                     getContentPane().removeAll();
-
                     getContentPane().add(play);
                     getContentPane().add(instrucciones);
                     getContentPane().add(equipo);
                     getContentPane().add(salir);
+
+                    getContentPane().add(etiqueta);
 
                     revalidate();
                     repaint();

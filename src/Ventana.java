@@ -40,23 +40,23 @@ public class Ventana extends JFrame{
 			{"E","E","E","E","E",	"1","0","e","f","0","e","i","f","0","1","0","e","i","f","0","e","f","0","1"},
 			{"E","E","E","E","E",	"1","0","g","h","0","g","j","h","0","u","0","g","j","h","0","g","h","0","1"},
 			{"E","E","E","E","E",	"1","P","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","1"},
-			{"E","E","E","E","E",	"1","0","3","4","0","n","0","3","2","7","2","4","0","n","0","3","4","0","1"},
-			{"E","E","E","E","E",	"1","0","0","0","0","1","0","0","0","1","0","0","0","1","0","0","0","0","1"},
-			{"E","E","E","E","E",	"c","2","2","b","0","5","2","4","0","u","0","3","2","6","0","a","2","2","d"},
-			{"E","E","E","E","E",	"E","E","E","1","0","1","0","0","0","0","0","0","0","1","0","1","E","E","E"},
-			{"E","E","E","E","E",	"E","E","E","1","0","1","0","a","4","E","3","b","0","1","0","1","E","E","E"},
-			{"E","E","E","E","E",	"3","2","2","d","0","u","0","1","E","E","E","1","0","u","0","c","2","2","4"},
+			{"E","E","E","E","E",	"1","0","r","t","0","s","0","r","l","y","l","t","0","s","0","r","t","0","1"},
+			{"E","E","E","E","E",	"1","0","0","0","0","k","0","0","0","k","0","0","0","k","0","0","0","0","1"},
+			{"E","E","E","E","E",	"c","2","2","b","0","x","l","t","0","v","0","r","l","z","0","a","2","2","d"},
+			{"E","E","E","E","E",	"E","E","E","1","0","k","0","0","0","0","0","0","0","k","0","1","E","E","E"},
+			{"E","E","E","E","E",	"E","E","E","1","0","k","0","a","4","E","3","b","0","k","0","1","E","E","E"},
+			{"E","E","E","E","E",	"3","2","2","d","0","v","0","1","E","E","E","1","0","v","0","c","2","2","4"},
 			{"E","E","E","E","E",	"X","0","0","0","0","0","0","1","E","E","E","1","0","0","0","0","0","0","X"},
-			{"E","E","E","E","E",	"3","2","2","b","0","n","0","c","2","2","2","d","0","n","0","a","2","2","4"},
-			{"E","E","E","E","E",	"E","E","E","1","0","1","0","0","0","0","0","0","0","1","0","1","E","E","E"},
-			{"E","E","E","E","E",	"E","E","E","1","0","1","0","3","2","7","2","4","0","1","0","1","E","E","E"},
-			{"E","E","E","E","E",	"a","2","2","d","0","u","0","0","0","1","0","0","0","u","0","c","2","2","b"},
-			{"E","E","E","E","E",	"1","0","0","0","0","0","0","n","0","1","0","n","0","0","0","0","0","0","1"},
-			{"E","E","E","E","E",	"1","0","3","b","0","3","2","d","0","u","0","c","2","4","0","a","4","0","1"},
-			{"E","E","E","E","E",	"1","0","0","1","0","0","0","0","0","0","0","0","0","0","0","1","0","0","1"},
-			{"E","E","E","E","E",	"5","4","0","u","0","n","0","3","2","7","2","4","0","n","0","u","0","3","6"},
-			{"E","E","E","E","E",	"1","0","0","0","0","1","0","0","0","1","0","0","0","1","0","0","0","0","1"},
-			{"E","E","E","E","E",	"1","0","3","2","2","8","2","4","0","u","0","3","2","8","2","2","4","0","1"},
+			{"E","E","E","E","E",	"3","2","2","b","0","s","0","c","2","2","2","d","0","s","0","a","2","2","4"},
+			{"E","E","E","E","E",	"E","E","E","1","0","k","0","0","0","0","0","0","0","k","0","1","E","E","E"},
+			{"E","E","E","E","E",	"E","E","E","1","0","k","0","r","l","y","l","t","0","k","0","1","E","E","E"},
+			{"E","E","E","E","E",	"a","2","2","d","0","v","0","0","0","k","0","0","0","v","0","c","2","2","b"},
+			{"E","E","E","E","E",	"1","0","0","0","0","0","0","s","0","k","0","s","0","0","0","0","0","0","1"},
+			{"E","E","E","E","E",	"1","0","r","o","0","r","l","q","0","v","0","p","l","t","0","m","t","0","1"},
+			{"E","E","E","E","E",	"1","0","0","k","0","0","0","0","0","0","0","0","0","0","0","k","0","0","1"},
+			{"E","E","E","E","E",	"5","4","0","v","0","s","0","r","l","y","l","t","0","s","0","v","0","3","6"},
+			{"E","E","E","E","E",	"1","0","0","0","0","k","0","0","0","k","0","0","0","k","0","0","0","0","1"},
+			{"E","E","E","E","E",	"1","0","r","l","l","w","l","t","0","v","0","r","l","w","l","l","t","0","1"},
 			{"E","E","E","E","E",	"1","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","1"},
 			{"E","E","E","E","E",	"c","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","d"},
 
@@ -72,7 +72,7 @@ public class Ventana extends JFrame{
 
 		imagenes.put("a", cargarImagen("imagenes/esquinaArribaIzq.png"));
 		imagenes.put("b", cargarImagen("imagenes/esquinaArribaDer.png"));
-		imagenes.put("c", cargarImagen("imagenes/esquina.png"));
+		imagenes.put("c", cargarImagen("imagenes/esquinaAbajoIzq.png"));
 		imagenes.put("d", cargarImagen("imagenes/esquinaAbajoDer.png"));
 
 		imagenes.put("e", cargarImagen("imagenes/esquinaInterior1.png"));
@@ -82,6 +82,24 @@ public class Ventana extends JFrame{
 
 		imagenes.put("i", cargarImagen("imagenes/lineaArriba.png"));
 		imagenes.put("j", cargarImagen("imagenes/lineaAbajo.png"));
+
+		imagenes.put("k", cargarImagen("imagenes/paredParadaInterior.png"));
+		imagenes.put("l", cargarImagen("imagenes/paredAcostadaInterior.png"));
+
+		imagenes.put("m", cargarImagen("imagenes/esquinaInteriorDoble1.png"));
+		imagenes.put("o", cargarImagen("imagenes/esquinaInteriorDoble2.png"));
+		imagenes.put("p", cargarImagen("imagenes/esquinaInteriorDoble3.png"));
+		imagenes.put("q", cargarImagen("imagenes/esquinaInteriorDoble4.png"));
+
+		imagenes.put("r", cargarImagen("imagenes/redondoInterior1.png"));
+		imagenes.put("s", cargarImagen("imagenes/redondoInterior2.png"));
+		imagenes.put("t", cargarImagen("imagenes/redondoInterior3.png"));
+		imagenes.put("v", cargarImagen("imagenes/redondoInterior4.png"));
+
+		imagenes.put("w", cargarImagen("imagenes/tripleInterior1.png"));
+		imagenes.put("x", cargarImagen("imagenes/tripleInterior2.png"));
+		imagenes.put("y", cargarImagen("imagenes/tripleInterior3.png"));
+		imagenes.put("z", cargarImagen("imagenes/tripleInterior4.png"));
 
 		imagenes.put("u", cargarImagen("imagenes/u.png"));
 		imagenes.put("n", cargarImagen("imagenes/n.png"));
@@ -170,7 +188,7 @@ public class Ventana extends JFrame{
 				}
 
 				colision();
-				tunel();
+				atajo();
 
 				juego.repaint();
 				juego.revalidate();
@@ -250,15 +268,15 @@ public class Ventana extends JFrame{
 		
 	}
 
-	public void tunel() {
+	public void atajo() {
 
 		System.out.println(px+","+py);
-		if(px == 105 && py == 260) {
+		if(px == 105 && py == 220) {
 			px = 455;
-			py = 260;
-		}else if(px == 455 && py == 260) {
+			py = 220;
+		}else if(px == 455 && py == 220) {
 			px = 105;
-			py = 260;
+			py = 220;
 		}
 	}
 
@@ -275,8 +293,6 @@ public class Ventana extends JFrame{
 			g.setColor(r.c);
 			g.fillRect(r.x, r.y, r.w, r.h);
 			g.drawImage(pacman, px, py, this);
-			
-			
 
 			//PAREDES
 			for(int i = 0; i < laberinto.length; i++) {
@@ -293,7 +309,9 @@ public class Ventana extends JFrame{
 
 					if(letra.equals("1") || letra.equals("2") || letra.equals("3") || letra.equals("4") || letra.equals("5") || letra.equals("6") || letra.equals("7") || letra.equals("8") ||
 							letra.equals("a") || letra.equals("b") || letra.equals("c") || letra.equals("d") || letra.equals("e") || letra.equals("f") || letra.equals("g") || letra.equals("h") ||
-							letra.equals("i") || letra.equals("j") || letra.equals("u") || letra.equals("n")) {
+							letra.equals("i") || letra.equals("j") || letra.equals("u") || letra.equals("n") || letra.equals("k") || letra.equals("l") || letra.equals("m") || letra.equals("n") ||
+							letra.equals("o") || letra.equals("p") || letra.equals("q") || letra.equals("r") || letra.equals("s") || letra.equals("t") || letra.equals("u") ||
+							letra.equals("v") || letra.equals("w") || letra.equals("x") || letra.equals("y") || letra.equals("z") || letra.equals("V") || letra.equals("F")) {
 						Rect pared = new Rect(j * 20, i * 20, 20, 20, Colores.colorParedes);
 						paredes.add(pared);
 					}

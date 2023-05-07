@@ -235,14 +235,18 @@ public class Ventana extends JFrame{
 			}
 		}
 		
-		for(Rect p : punto) {
-			if(r.colision(p)) {
-				puntos++;
-				System.out.println("PUNTOSSSSSSS" + puntos);
-				
-				break;
-			}
+		for (int i = 0; i < punto.size(); i++) {
+		    Rect p = punto.get(i);
+		    if (r.colision(p)) {
+		        puntos++;
+		        System.out.println("PUNTOSSSSSSS" + puntos);
+		        punto.remove(i);
+		        i--;
+		        juego.repaint();
+		        break;
+		    }
 		}
+		
 	}
 
 	public void tunel() {

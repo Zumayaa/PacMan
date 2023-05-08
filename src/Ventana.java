@@ -277,17 +277,15 @@ public class Ventana extends JFrame{
 		        break;
 		    }
 		}
-		
-		 for (Fantasma fantasma : fantasmas) {
+		//Colison del pacman con los fantasmas
+		for (Fantasma fantasma : fantasmas) {
 		        Rect rectFantasma = new Rect(fantasma.x, fantasma.y, fantasma.w, fantasma.h, fantasma.c);
 		        if (r.colision(rectFantasma)) {
 		            px = 120;
 		            py = 60;
-		            System.out.println("hola");
 		            break;
 		        }
-		    }
-		
+		   }
 	}
 
 	public void atajo() {
@@ -491,6 +489,13 @@ public class Ventana extends JFrame{
 						intentos++;
 					}
 				}
+				//Colision de los fantasmas con el pacman
+				Rect r = new Rect(px, py, 20, 20, Color.yellow);
+		        Rect rectFantasma = new Rect(x, y, w, h, c);
+		        if (r.colision(rectFantasma)) {
+		            px = 120;
+		            py = 60;
+		        }
 			}
 		}
 		//Se crea un metodo que verifique si hay una colision con las paredes con el método de la colision ya antes escrita

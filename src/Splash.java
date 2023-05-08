@@ -276,13 +276,13 @@ public class Splash extends JDialog {
             wasd.setIcon(iconowasd);
             add(wasd);
             
-            JLabel rosa = new JLabel("");
-            rosa.setSize(700,250);
-            rosa.setLocation(0,-90);
-            ImageIcon rosaGIF = new ImageIcon("imagenes/instructions.gif");
-            Icon iconorosa = new ImageIcon(rosaGIF.getImage().getScaledInstance(rosa.getWidth(), rosa.getHeight(), Image.SCALE_DEFAULT));
-            rosa.setIcon(iconorosa);
-            add(rosa);
+            JLabel instructions = new JLabel("");
+            instructions.setSize(700,250);
+            instructions.setLocation(0,-90);
+            ImageIcon instructionsGIF = new ImageIcon("imagenes/instructions.gif");
+            Icon iconoinstructions = new ImageIcon(instructionsGIF.getImage().getScaledInstance(instructions.getWidth(), instructions.getHeight(), Image.SCALE_DEFAULT));
+            instructions.setIcon(iconoinstructions);
+            add(instructions);
 
             ParpadeoBoton atras = new ParpadeoBoton("Regresar al menú");
             atras.setFont(new Font("Tahoma", Font.PLAIN,18));
@@ -304,7 +304,7 @@ public class Splash extends JDialog {
     private void inicioHilo() {
         Thread hilo = new Thread(new Runnable() {
         	//Cambié el valor porque va demasiado lento
-            int x = 90;
+            int x = 0;
             String texto = " ";
 
             public void run() {

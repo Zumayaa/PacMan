@@ -2,7 +2,11 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+
+
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
@@ -133,6 +137,14 @@ public class Ventana extends JFrame{
 		gbc.gridy = 0;
 		gbc.anchor = GridBagConstraints.WEST;
 		panelSuperior.add(boton, gbc);
+		boton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+			
+		});
 
 		JLabel etiqueta = new JLabel("SCORE: ");
 		etiqueta.setPreferredSize(new Dimension(100, 20));

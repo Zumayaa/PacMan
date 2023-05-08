@@ -251,7 +251,7 @@ public class Splash extends JDialog {
             JLabel label = new JLabel("CONTROLES");
             label.setFont(new Font("Tahoma", Font.PLAIN,30));
             label.setForeground(Color.yellow);
-            label.setBounds(120,30,500,100);
+            label.setBounds(210,30,500,100);
             add(label);
             
             JLabel control = new JLabel("Para poder moverte por el mapa utiliza las flechas de tu teclado o WASD!");
@@ -270,15 +270,23 @@ public class Splash extends JDialog {
             
             JLabel wasd = new JLabel("");
             wasd.setSize(300,250);
-            wasd.setLocation(300,350);
+            wasd.setLocation(300,140);
             ImageIcon wasdGIF = new ImageIcon("imagenes/wasd.png");
             Icon iconowasd = new ImageIcon(wasdGIF.getImage().getScaledInstance(wasd.getWidth(), wasd.getHeight(), Image.SCALE_DEFAULT));
             wasd.setIcon(iconowasd);
             add(wasd);
+            
+            JLabel rosa = new JLabel("");
+            rosa.setSize(700,250);
+            rosa.setLocation(0,-90);
+            ImageIcon rosaGIF = new ImageIcon("imagenes/instructions.gif");
+            Icon iconorosa = new ImageIcon(rosaGIF.getImage().getScaledInstance(rosa.getWidth(), rosa.getHeight(), Image.SCALE_DEFAULT));
+            rosa.setIcon(iconorosa);
+            add(rosa);
 
             ParpadeoBoton atras = new ParpadeoBoton("Regresar al menú");
             atras.setFont(new Font("Tahoma", Font.PLAIN,18));
-            atras.setBounds(200,310,300,50);
+            atras.setBounds(150,480,300,50);
             
             Timer temporizador = new Timer(500, atras);
             temporizador.start();

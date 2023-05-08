@@ -278,6 +278,16 @@ public class Ventana extends JFrame{
 		    }
 		}
 		
+		 for (Fantasma fantasma : fantasmas) {
+		        Rect rectFantasma = new Rect(fantasma.x, fantasma.y, fantasma.w, fantasma.h, fantasma.c);
+		        if (r.colision(rectFantasma)) {
+		            px = 120;
+		            py = 60;
+		            System.out.println("hola");
+		            break;
+		        }
+		    }
+		
 	}
 
 	public void atajo() {

@@ -399,11 +399,25 @@ public class Ventana extends JFrame {
 				}
 			}
 		}
+
+		boolean quedaAlgun0 = false;
+		for (int i = 0; i < laberinto.length; i++) {
+			for (int j = 0; j < laberinto[0].length; j++) {
+				if (laberinto[i][j].equals("0")) {
+					quedaAlgun0 = true;
+					break;
+				}
+			}
+			if (quedaAlgun0) {
+				break;
+			}
+		}
+
+		if (!quedaAlgun0) {
+			JOptionPane.showMessageDialog(null, "Ganasteeeeeee amiiix!");
+			System.exit(0);
+		}
 	}
-
-
-
-
 
 
 	class dibujar extends JPanel {

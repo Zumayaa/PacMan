@@ -1,9 +1,5 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-
-
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,12 +23,14 @@ public class Ventana extends JFrame{
 	ArrayList<Rect> paredes = new ArrayList<Rect>();
 	ArrayList<Rect> comidas = new ArrayList<>();
 	ArrayList<Fantasma> fantasmas = new ArrayList<Fantasma>();
-	
+
 	public int puntos = 0;
 	ArrayList<Rect> punto = new ArrayList<Rect>();
 	JPanel panel = new JPanel();
 	JPanel juego = new JPanel();
 	private HashMap<String, Image> imagenes = new HashMap<String, Image>();
+
+	int vidas = 3;
 
 
 	//LO CAMBIE A STRING PORQUE ME DI CUENTA QUE SE OCUPABAN MUCHOS DISEÑOS DE PAREDES :'V
@@ -63,7 +61,7 @@ public class Ventana extends JFrame{
 			{"E","E","E","E","E",	"1","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","1"},
 			{"E","E","E","E","E",	"c","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","d"},
 
-			{"E","E","E","E","E",	"V","V","V","E","E","E","E","E","E","E","E","E","E","E","E","E","F","F","F"},
+			{"E","E","E","E","E",	"A","B","C","E","E","E","E","E","E","E","E","E","E","E","E","D","E","F","G"},
 			{"E","E","E","E","E",	"E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E"},
 	};
 	public Ventana () {
@@ -114,7 +112,6 @@ public class Ventana extends JFrame{
 		imagenes.put("7", cargarImagen("imagenes/doble3.png"));
 		imagenes.put("8", cargarImagen("imagenes/doble4.png"));
 
-		imagenes.put("V", cargarImagen("imagenes/pacman.png"));
 		imagenes.put("F", cargarImagen("imagenes/fruta.png"));
 		imagenes.put("P", cargarImagen("imagenes/comida.png"));
 
@@ -143,7 +140,7 @@ public class Ventana extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
-			
+
 		});
 
 		JLabel etiqueta = new JLabel("SCORE: ");
@@ -196,6 +193,40 @@ public class Ventana extends JFrame{
 				}
 				if(e.getKeyCode() == 68 && px < 500) {
 					px = px + 5;
+
+				}
+
+				if(vidas == 3) {
+					imagenes.put("A", cargarImagen("imagenes/pacman.png"));
+					imagenes.put("B", cargarImagen("imagenes/pacman.png"));
+					imagenes.put("C", cargarImagen("imagenes/pacman.png"));
+					revalidate();
+					repaint();
+
+				} else if (vidas == 2) {
+					imagenes.put("A", cargarImagen("imagenes/pacman.png"));
+					imagenes.put("B", cargarImagen("imagenes/pacman.png"));
+					imagenes.put("C", cargarImagen("imagenes/nada.png"));
+					revalidate();
+					repaint();
+
+				} else if (vidas == 1) {
+					imagenes.put("A", cargarImagen("imagenes/pacman.png"));
+					imagenes.put("B", cargarImagen("imagenes/nada.png"));
+					imagenes.put("C", cargarImagen("imagenes/nada.png"));
+					revalidate();
+					repaint();
+
+				} else if (vidas == 0) {
+					imagenes.put("A", cargarImagen("imagenes/nada.png"));
+					imagenes.put("B", cargarImagen("imagenes/nada.png"));
+					imagenes.put("C", cargarImagen("imagenes/nada.png"));
+					JOptionPane.showMessageDialog(null, "PERDISTESSSS", "GAY", JOptionPane.INFORMATION_MESSAGE);
+
+					revalidate();
+					repaint();
+
+					System.exit(0);
 
 				}
 
@@ -264,28 +295,29 @@ public class Ventana extends JFrame{
 				break;
 			}
 		}
-		
+
 		for (int i = 0; i < punto.size(); i++) {
-		    Rect p = punto.get(i);
-		    if (r.colision(p)) {
-		        puntos++;
-		        System.out.println("PUNTOSSSSSSS" + puntos);
-		        punto.remove(p);
-		        
-		        
-		        juego.repaint();
-		        break;
-		    }
+			Rect p = punto.get(i);
+			if (r.colision(p)) {
+				puntos++;
+				System.out.println("PUNTOSSSSSSS" + puntos);
+				punto.remove(p);
+
+
+				juego.repaint();
+				break;
+			}
 		}
 		//Colison del pacman con los fantasmas
 		for (Fantasma fantasma : fantasmas) {
-		        Rect rectFantasma = new Rect(fantasma.x, fantasma.y, fantasma.w, fantasma.h, fantasma.c);
-		        if (r.colision(rectFantasma)) {
-		            px = 120;
-		            py = 60;
-		            break;
-		        }
-		   }
+			Rect rectFantasma = new Rect(fantasma.x, fantasma.y, fantasma.w, fantasma.h, fantasma.c);
+			if (r.colision(rectFantasma) || (anteriorPx == fantasma.x && anteriorPy == fantasma.y)) {
+				vidas = vidas - 1;
+				px = 120;
+				py = 60;
+				break;
+			}
+		}
 	}
 
 	public void atajo() {
@@ -300,6 +332,38 @@ public class Ventana extends JFrame{
 		}
 	}
 
+	public void vidasPacman() {
+
+		if(vidas == 3) {
+			imagenes.put("A", cargarImagen("imagenes/pacman.png"));
+			imagenes.put("B", cargarImagen("imagenes/pacman.png"));
+			imagenes.put("C", cargarImagen("imagenes/pacman.png"));
+			revalidate();
+			repaint();
+
+		} else if (vidas == 2) {
+			imagenes.put("A", cargarImagen("imagenes/pacman.png"));
+			imagenes.put("B", cargarImagen("imagenes/pacman.png"));
+			imagenes.put("C", cargarImagen("imagenes/nada.png"));
+			revalidate();
+			repaint();
+
+		} else if (vidas == 1) {
+			imagenes.put("A", cargarImagen("imagenes/pacman.png"));
+			imagenes.put("B", cargarImagen("imagenes/nada.png"));
+			imagenes.put("C", cargarImagen("imagenes/nada.png"));
+			revalidate();
+			repaint();
+
+		} else if (vidas == 0) {
+			imagenes.put("A", cargarImagen("imagenes/nada.png"));
+			imagenes.put("B", cargarImagen("imagenes/nada.png"));
+			imagenes.put("C", cargarImagen("imagenes/nada.png"));
+			revalidate();
+			repaint();
+		}
+	}
+
 	class dibujar extends JPanel {
 
 		public void paintComponent(Graphics g) {
@@ -307,12 +371,6 @@ public class Ventana extends JFrame{
 			super.paintComponent(g);
 
 			setBackground(Color.BLACK);
-
-			//JUGADOR
-			Rect r = new Rect(px, py, 20, 20, Color.yellow);
-			g.setColor(r.c);
-			g.fillRect(r.x, r.y, r.w, r.h);
-			g.drawImage(pacman, px, py, this);
 
 			//PAREDES
 			for(int i = 0; i < laberinto.length; i++) {
@@ -335,13 +393,19 @@ public class Ventana extends JFrame{
 						Rect pared = new Rect(j * 20, i * 20, 20, 20, Colores.colorParedes);
 						paredes.add(pared);
 					}
-					
+
 					if(letra.equals("P")) {
 						Rect point = new Rect(j *20,i *20, 20, 20, Colores.colorParedes);
 						punto.add(point);
 					}
 				}
 			}
+
+			//JUGADOR
+			Rect r = new Rect(px, py, 20, 20, Color.yellow);
+			g.setColor(r.c);
+			g.fillRect(r.x, r.y, r.w, r.h);
+			g.drawImage(pacman, px, py, this);
 
 			//COMIDA
 	        /*for (Rect c : comida) {
@@ -417,32 +481,32 @@ public class Ventana extends JFrame{
 		BufferedImage imagen;
 
 		public Fantasma(int x, int y, int w, int h, Color c, List<Rect> paredes) {
-			 this.x = x;
-			    this.y = y;
-			    this.w = w;
-			    this.h = h;
-			    this.c = c;
-			    this.paredes = paredes;
+			this.x = x;
+			this.y = y;
+			this.w = w;
+			this.h = h;
+			this.c = c;
+			this.paredes = paredes;
 
-			    do {
-			        dirX = rnd.nextInt(3) - 1;
-			        dirY = rnd.nextInt(3) - 1;
-			    } while (dirX == 0 && dirY == 0); // se asegura de que ambas direcciones no sean cero al mismo tiempo
+			do {
+				dirX = rnd.nextInt(3) - 1;
+				dirY = rnd.nextInt(3) - 1;
+			} while (dirX == 0 && dirY == 0); // se asegura de que ambas direcciones no sean cero al mismo tiempo
 
-			    //Se añaden las imagenes de los fantasmas comparando si es igual al color del fantasma
-			    try {
-			        if (c.equals(Color.red)) {
-			            imagen = ImageIO.read(new File("imagenes/rojo.png"));
-			        } else if (c.equals(Color.pink)) {
-			            imagen = ImageIO.read(new File("imagenes/rosa.png"));
-			        } else if (c.equals(Color.cyan)) {
-			            imagen = ImageIO.read(new File("imagenes/cyan.png"));
-			        } else if (c.equals(Color.orange)) {
-			            imagen = ImageIO.read(new File("imagenes/naranja.png"));
-			        }
-			    } catch (IOException e) {
-			        e.printStackTrace();
-			    }
+			//Se añaden las imagenes de los fantasmas comparando si es igual al color del fantasma
+			try {
+				if (c.equals(Color.red)) {
+					imagen = ImageIO.read(new File("imagenes/rojo.png"));
+				} else if (c.equals(Color.pink)) {
+					imagen = ImageIO.read(new File("imagenes/rosa.png"));
+				} else if (c.equals(Color.cyan)) {
+					imagen = ImageIO.read(new File("imagenes/cyan.png"));
+				} else if (c.equals(Color.orange)) {
+					imagen = ImageIO.read(new File("imagenes/naranja.png"));
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
 		}
 
@@ -491,11 +555,13 @@ public class Ventana extends JFrame{
 				}
 				//Colision de los fantasmas con el pacman
 				Rect r = new Rect(px, py, 20, 20, Color.yellow);
-		        Rect rectFantasma = new Rect(x, y, w, h, c);
-		        if (r.colision(rectFantasma)) {
-		            px = 120;
-		            py = 60;
-		        }
+				Rect rectFantasma = new Rect(x, y, w, h, c);
+				if (r.colision(rectFantasma)) {
+					vidas = vidas - 1;
+					System.out.println(vidas);
+					px = 120;
+					py = 60;
+				}
 			}
 		}
 		//Se crea un metodo que verifique si hay una colision con las paredes con el método de la colision ya antes escrita

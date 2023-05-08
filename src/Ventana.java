@@ -409,30 +409,32 @@ public class Ventana extends JFrame{
 		BufferedImage imagen;
 
 		public Fantasma(int x, int y, int w, int h, Color c, List<Rect> paredes) {
-			this.x = x;
-			this.y = y;
-			this.w = w;
-			this.h = h;
-			this.c = c;
-			this.paredes = paredes;
+			 this.x = x;
+			    this.y = y;
+			    this.w = w;
+			    this.h = h;
+			    this.c = c;
+			    this.paredes = paredes;
 
-			dirX = rnd.nextInt(3) - 1;
-			dirY = rnd.nextInt(3) - 1;
+			    do {
+			        dirX = rnd.nextInt(3) - 1;
+			        dirY = rnd.nextInt(3) - 1;
+			    } while (dirX == 0 && dirY == 0); // se asegura de que ambas direcciones no sean cero al mismo tiempo
 
-			//Se añaden las imagenes de los fantasmas comparando si es igual al color del fantasma
-			try {
-				if (c.equals(Color.red)) {
-					imagen = ImageIO.read(new File("imagenes/rojo.png"));
-				} else if (c.equals(Color.pink)) {
-					imagen = ImageIO.read(new File("imagenes/rosa.png"));
-				} else if (c.equals(Color.cyan)) {
-					imagen = ImageIO.read(new File("imagenes/cyan.png"));
-				} else if (c.equals(Color.orange)) {
-					imagen = ImageIO.read(new File("imagenes/naranja.png"));
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			    //Se añaden las imagenes de los fantasmas comparando si es igual al color del fantasma
+			    try {
+			        if (c.equals(Color.red)) {
+			            imagen = ImageIO.read(new File("imagenes/rojo.png"));
+			        } else if (c.equals(Color.pink)) {
+			            imagen = ImageIO.read(new File("imagenes/rosa.png"));
+			        } else if (c.equals(Color.cyan)) {
+			            imagen = ImageIO.read(new File("imagenes/cyan.png"));
+			        } else if (c.equals(Color.orange)) {
+			            imagen = ImageIO.read(new File("imagenes/naranja.png"));
+			        }
+			    } catch (IOException e) {
+			        e.printStackTrace();
+			    }
 
 		}
 

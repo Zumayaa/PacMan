@@ -312,9 +312,11 @@ public class Ventana extends JFrame{
 		for (Fantasma fantasma : fantasmas) {
 			Rect rectFantasma = new Rect(fantasma.x, fantasma.y, fantasma.w, fantasma.h, fantasma.c);
 			if (r.colision(rectFantasma) || (anteriorPx == fantasma.x && anteriorPy == fantasma.y)) {
-				vidas = vidas - 1;
 				px = 120;
 				py = 60;
+				vidas = vidas - 1;
+				revalidate();
+				repaint();
 				break;
 			}
 		}
@@ -509,7 +511,7 @@ public class Ventana extends JFrame{
 			}
 
 		}
-
+		
 		public void dibujar(Graphics g) {
 			g.setColor(c);
 			g.fillRect(x, y, 20, 20);
@@ -557,10 +559,13 @@ public class Ventana extends JFrame{
 				Rect r = new Rect(px, py, 20, 20, Color.yellow);
 				Rect rectFantasma = new Rect(x, y, w, h, c);
 				if (r.colision(rectFantasma)) {
-					vidas = vidas - 1;
-					System.out.println(vidas);
 					px = 120;
 					py = 60;
+					vidas = vidas - 1;
+					vidasPacman();
+					revalidate();
+					repaint();
+					
 				}
 			}
 		}

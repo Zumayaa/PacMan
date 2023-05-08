@@ -86,7 +86,7 @@ public class Splash extends JDialog {
     public class InstruccionesVentana extends JFrame {
 
         public InstruccionesVentana() {
-            super("Controls"); // título de la ventana
+            super("Instrucciones"); // título de la ventana
             setSize(600, 600); // tamaño de la ventana
 
             setLocationRelativeTo(null);
@@ -239,21 +239,49 @@ public class Splash extends JDialog {
     public class InformacionVentana extends JFrame {
 
         public InformacionVentana() {
-            super("About us"); // título de la ventana
-            setSize(452, 600); // tamaño de la ventana
+            super("Controles"); // título de la ventana
+            setSize(600, 600); // tamaño de la ventana
 
             setLocationRelativeTo(null);
             getContentPane().setLayout(null);
             setUndecorated(true);
+            
+            getContentPane().setBackground(Color.black);
 
-            JLabel label = new JLabel("Aquí va la información");
-            label.setFont(new Font("Tahoma", Font.PLAIN,18));
-            label.setBounds(50,50,300,100);
-            add(label);    
+            JLabel label = new JLabel("CONTROLES");
+            label.setFont(new Font("Tahoma", Font.PLAIN,30));
+            label.setForeground(Color.yellow);
+            label.setBounds(120,30,500,100);
+            add(label);
+            
+            JLabel control = new JLabel("Para poder moverte por el mapa utiliza las flechas de tu teclado o WASD!");
+            control.setFont(new Font("Tahoma", Font.PLAIN,15));
+            control.setForeground(Color.yellow);
+            control.setBounds(60,90,600,100);
+            add(control); 
+            
+            JLabel directions = new JLabel("");
+            directions.setSize(270,170);
+            directions.setLocation(10,190);
+            ImageIcon directionsGIF = new ImageIcon("imagenes/directions.png");
+            Icon iconoDirections = new ImageIcon(directionsGIF.getImage().getScaledInstance(directions.getWidth(), directions.getHeight(), Image.SCALE_DEFAULT));
+            directions.setIcon(iconoDirections);
+            add(directions);
+            
+            JLabel wasd = new JLabel("");
+            wasd.setSize(300,250);
+            wasd.setLocation(300,350);
+            ImageIcon wasdGIF = new ImageIcon("imagenes/wasd.png");
+            Icon iconowasd = new ImageIcon(wasdGIF.getImage().getScaledInstance(wasd.getWidth(), wasd.getHeight(), Image.SCALE_DEFAULT));
+            wasd.setIcon(iconowasd);
+            add(wasd);
 
-            JButton atras = new JButton("Regresar al menú");
+            ParpadeoBoton atras = new ParpadeoBoton("Regresar al menú");
             atras.setFont(new Font("Tahoma", Font.PLAIN,18));
-            atras.setBounds(200,310,200,200);
+            atras.setBounds(200,310,300,50);
+            
+            Timer temporizador = new Timer(500, atras);
+            temporizador.start();
             
             atras.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -268,7 +296,7 @@ public class Splash extends JDialog {
     private void inicioHilo() {
         Thread hilo = new Thread(new Runnable() {
         	//Cambié el valor porque va demasiado lento
-            int x = 0;
+            int x = 90;
             String texto = " ";
 
             public void run() {
@@ -299,11 +327,11 @@ public class Splash extends JDialog {
                     play.setFont(new Font("Tahoma", Font.PLAIN, 18));
                     play.setBounds(240, 420, 140, 25);
 
-                    ParpadeoBoton instrucciones = new ParpadeoBoton("CONTROLS");
+                    ParpadeoBoton instrucciones = new ParpadeoBoton("INSTRUCTIONS");
                     instrucciones.setFont(new Font("Tahoma", Font.PLAIN, 18));
                     instrucciones.setBounds(240, 455, 140, 25);
 
-                    ParpadeoBoton equipo = new ParpadeoBoton("ABOUT US");
+                    ParpadeoBoton equipo = new ParpadeoBoton("CONTROLS");
                     equipo.setFont(new Font("Tahoma", Font.PLAIN, 18));
                     equipo.setBounds(240, 490, 140, 25);
 

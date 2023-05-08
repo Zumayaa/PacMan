@@ -17,6 +17,8 @@ public class Ventana extends JFrame {
 
 	public int px = 275;//Posicion X del persona
 	public int py = 260;
+	long tiempoPastilla;
+	boolean pastillaActiva = true;
 
 	int anteriorPx, anteriorPy;
 
@@ -384,6 +386,7 @@ public class Ventana extends JFrame {
 
 	public void score() {
 		boolean[][] visitado = new boolean[26][24];
+
 		Rect r = new Rect(px, py, 20, 20, Color.yellow);
 
 		for (int i = 0; i < laberinto.length; i++) {
@@ -396,9 +399,27 @@ public class Ventana extends JFrame {
 						aumentarPuntaje();
 					}
 					break;
-				}
+				} else if (laberinto[i][j].equals("P") && r.colision(new Rect(j * 20, i * 20, 20, 20, Color.black))) {
+					if (!visitado[i][j]) {
+						visitado[i][j] = true;
+						laberinto[i][j] = "-";
+						aumentarPuntaje();
+						pastillaActiva = true;
+						repaint();
+
+						// Esperar tiempoPastilla milisegundos
+						try {
+							Thread.sleep(tiempoPastilla);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+
+						pastillaActiva = false;
+						repaint();
+					}
+					break;
 			}
-		}
+		}}
 
 		boolean quedaAlgun0 = false;
 		for (int i = 0; i < laberinto.length; i++) {
@@ -459,11 +480,28 @@ public class Ventana extends JFrame {
 				}
 			}
 
+			Image imagenRect = null;
+			Image pastillaEfecto = null;
+			try {
+				imagenRect = ImageIO.read(new File("imagenes/pacman.png"));
+				pastillaEfecto = ImageIO.read(new File("imagenes/nada.png"));
+			} catch (IOException e) {
+				System.out.println("No se pudo cargar la imagen");
+				e.printStackTrace();
+			}
+
 			//JUGADOR
-			Rect r = new Rect(px, py, 20, 20, Color.yellow);
+			Rect r = new Rect(px, py, 20, 20, null);
 			g.setColor(r.c);
 			g.fillRect(r.x, r.y, r.w, r.h);
-			g.drawImage(pacman, px, py, this);
+			g.drawImage(imagenRect, r.x, r.y, r.w, r.h, null);
+
+			if (pastillaActiva == false) {
+				g.drawImage(pastillaEfecto, r.x, r.y, r.w, r.h, null);
+			} else {
+				// Dibujar la imagen por defecto
+				g.drawImage(imagenRect, px, py, 20, 20, null);
+			}
 
 			//COMIDA
 	        /*for (Rect c : comida) {

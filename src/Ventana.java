@@ -1,4 +1,5 @@
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,17 +9,18 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
+import javax.sound.sampled.*;
 
-public class Ventana extends JFrame{
+public class Ventana extends JFrame {
 
-	public int px=120;//Posicion X del persona
-	public int py=60;
+	public int px = 275;//Posicion X del persona
+	public int py = 260;
 
 	int anteriorPx, anteriorPy;
+
+	JLabel etiqueta;
 	private Image pacman;
 	ArrayList<Rect> paredes = new ArrayList<Rect>();
 	ArrayList<Rect> comidas = new ArrayList<>();
@@ -30,41 +32,44 @@ public class Ventana extends JFrame{
 	JPanel juego = new JPanel();
 	private HashMap<String, Image> imagenes = new HashMap<String, Image>();
 
+	private boolean juegoIniciado = false;
+
 	int vidas = 3;
 
 
 	//LO CAMBIE A STRING PORQUE ME DI CUENTA QUE SE OCUPABAN MUCHOS DISEÑOS DE PAREDES :'V
 	private String[][] laberinto = {
 
-			{"E","E","E","E","E",	"a","2","2","2","2","2","2","2","2","7","2","2","2","2","2","2","2","2","b"},
-			{"E","E","E","E","E",	"1","0","0","0","P","0","0","0","0","1","0","0","0","0","0","0","0","0","1"},
-			{"E","E","E","E","E",	"1","0","e","f","P","e","i","f","0","1","0","e","i","f","0","e","f","0","1"},
-			{"E","E","E","E","E",	"1","0","g","h","P","g","j","h","0","u","0","g","j","h","0","g","h","0","1"},
-			{"E","E","E","E","E",	"1","P","0","0","P","0","0","0","0","0","0","0","0","0","0","0","0","0","1"},
-			{"E","E","E","E","E",	"1","P","r","t","P","s","0","r","l","y","l","t","0","s","0","r","t","0","1"},
-			{"E","E","E","E","E",	"1","P","P","P","P","k","0","0","0","k","0","0","0","k","0","0","0","0","1"},
-			{"E","E","E","E","E",	"c","2","2","b","0","x","l","t","0","v","0","r","l","z","0","a","2","2","d"},
-			{"E","E","E","E","E",	"E","E","E","1","0","k","0","0","0","0","0","0","0","k","0","1","E","E","E"},
-			{"E","E","E","E","E",	"E","E","E","1","0","k","0","a","4","E","3","b","0","k","0","1","E","E","E"},
-			{"E","E","E","E","E",	"3","2","2","d","0","v","0","1","E","E","E","1","0","v","0","c","2","2","4"},
-			{"E","E","E","E","E",	"X","0","0","0","0","0","0","1","E","E","E","1","0","0","0","0","0","0","X"},
-			{"E","E","E","E","E",	"3","2","2","b","0","s","0","c","2","2","2","d","0","s","0","a","2","2","4"},
-			{"E","E","E","E","E",	"E","E","E","1","0","k","0","0","0","0","0","0","0","k","0","1","E","E","E"},
-			{"E","E","E","E","E",	"E","E","E","1","0","k","0","r","l","y","l","t","0","k","0","1","E","E","E"},
-			{"E","E","E","E","E",	"a","2","2","d","0","v","0","0","0","k","0","0","0","v","0","c","2","2","b"},
-			{"E","E","E","E","E",	"1","0","0","0","0","0","0","s","0","k","0","s","0","0","0","0","0","0","1"},
-			{"E","E","E","E","E",	"1","0","r","o","0","r","l","q","0","v","0","p","l","t","0","m","t","0","1"},
-			{"E","E","E","E","E",	"1","0","0","k","0","0","0","0","0","0","0","0","0","0","0","k","0","0","1"},
-			{"E","E","E","E","E",	"5","4","0","v","0","s","0","r","l","y","l","t","0","s","0","v","0","3","6"},
-			{"E","E","E","E","E",	"1","0","0","0","0","k","0","0","0","k","0","0","0","k","0","0","0","0","1"},
-			{"E","E","E","E","E",	"1","0","r","l","l","w","l","t","0","v","0","r","l","w","l","l","t","0","1"},
-			{"E","E","E","E","E",	"1","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","1"},
-			{"E","E","E","E","E",	"c","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","d"},
+			{"E", "E", "E", "E", "E", "a", "2", "2", "2", "2", "2", "2", "2", "2", "7", "2", "2", "2", "2", "2", "2", "2", "2", "b"},
+			{"E", "E", "E", "E", "E", "1", "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", "1"},
+			{"E", "E", "E", "E", "E", "1", "P", "e", "f", "0", "e", "i", "f", "0", "1", "0", "e", "i", "f", "0", "e", "f", "P", "1"},
+			{"E", "E", "E", "E", "E", "1", "0", "g", "h", "0", "g", "j", "h", "0", "u", "0", "g", "j", "h", "0", "g", "h", "0", "1"},
+			{"E", "E", "E", "E", "E", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1"},
+			{"E", "E", "E", "E", "E", "1", "0", "r", "t", "0", "s", "0", "r", "l", "y", "l", "t", "0", "s", "0", "r", "t", "0", "1"},
+			{"E", "E", "E", "E", "E", "1", "0", "0", "0", "0", "k", "0", "0", "0", "k", "0", "0", "0", "k", "0", "0", "0", "0", "1"},
+			{"E", "E", "E", "E", "E", "c", "2", "2", "b", "0", "x", "l", "t", "0", "v", "0", "r", "l", "z", "0", "a", "2", "2", "d"},
+			{"E", "E", "E", "E", "E", "E", "E", "E", "1", "0", "k", "0", "0", "0", "0", "0", "0", "0", "k", "0", "1", "E", "E", "E"},
+			{"E", "E", "E", "E", "E", "E", "E", "E", "1", "0", "k", "0", "a", "4", "E", "3", "b", "0", "k", "0", "1", "E", "E", "E"},
+			{"E", "E", "E", "E", "E", "3", "2", "2", "d", "0", "v", "0", "1", "E", "E", "E", "1", "0", "v", "0", "c", "2", "2", "4"},
+			{"E", "E", "E", "E", "E", "X", "0", "0", "0", "0", "0", "0", "1", "E", "E", "E", "1", "0", "0", "0", "0", "0", "0", "X"},
+			{"E", "E", "E", "E", "E", "3", "2", "2", "b", "0", "s", "0", "c", "2", "2", "2", "d", "0", "s", "0", "a", "2", "2", "4"},
+			{"E", "E", "E", "E", "E", "E", "E", "E", "1", "0", "k", "0", "0", "0", "0", "0", "0", "0", "k", "0", "1", "E", "E", "E"},
+			{"E", "E", "E", "E", "E", "E", "E", "E", "1", "0", "k", "0", "r", "l", "y", "l", "t", "0", "k", "0", "1", "E", "E", "E"},
+			{"E", "E", "E", "E", "E", "a", "2", "2", "d", "0", "v", "0", "0", "0", "k", "0", "0", "0", "v", "0", "c", "2", "2", "b"},
+			{"E", "E", "E", "E", "E", "1", "0", "0", "0", "0", "0", "0", "s", "0", "k", "0", "s", "0", "0", "0", "0", "0", "0", "1"},
+			{"E", "E", "E", "E", "E", "1", "0", "r", "o", "0", "r", "l", "q", "0", "v", "0", "p", "l", "t", "0", "m", "t", "0", "1"},
+			{"E", "E", "E", "E", "E", "1", "P", "0", "k", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "k", "0", "P", "1"},
+			{"E", "E", "E", "E", "E", "5", "4", "0", "v", "0", "s", "0", "r", "l", "y", "l", "t", "0", "s", "0", "v", "0", "3", "6"},
+			{"E", "E", "E", "E", "E", "1", "0", "0", "0", "0", "k", "0", "0", "0", "k", "0", "0", "0", "k", "0", "0", "0", "0", "1"},
+			{"E", "E", "E", "E", "E", "1", "0", "r", "l", "l", "w", "l", "t", "0", "v", "0", "r", "l", "w", "l", "l", "t", "0", "1"},
+			{"E", "E", "E", "E", "E", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1"},
+			{"E", "E", "E", "E", "E", "c", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "d"},
 
-			{"E","E","E","E","E",	"A","B","C","E","E","E","E","E","E","E","E","E","E","E","E","D","E","F","G"},
-			{"E","E","E","E","E",	"E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E"},
+			{"E", "E", "E", "E", "E", "A", "B", "C", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "D", "E", "F", "G"},
+			{"E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E"},
 	};
-	public Ventana () {
+
+	public Ventana() {
 
 		pacman = new ImageIcon("imagenes/pacman.png").getImage();
 
@@ -113,11 +118,14 @@ public class Ventana extends JFrame{
 		imagenes.put("8", cargarImagen("imagenes/doble4.png"));
 
 		imagenes.put("F", cargarImagen("imagenes/fruta.png"));
-		imagenes.put("P", cargarImagen("imagenes/comida.png"));
+
+		imagenes.put("0", cargarImagen("imagenes/comida.png"));
+		imagenes.put("P", cargarImagen("imagenes/pastilla.png"));
+
 
 		//PROPIEDADES VENTANA
 		this.setTitle("Pacman");
-		this.setSize(600,600);
+		this.setSize(600, 600);
 		this.setLayout(new BorderLayout());
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -143,7 +151,7 @@ public class Ventana extends JFrame{
 
 		});
 
-		JLabel etiqueta = new JLabel("SCORE: ");
+		etiqueta = new JLabel("SCORE: ");
 		etiqueta.setPreferredSize(new Dimension(100, 20));
 		gbc = new GridBagConstraints();
 		gbc.gridx = 1;
@@ -182,21 +190,21 @@ public class Ventana extends JFrame{
 				anteriorPx = px;
 				anteriorPy = py;
 
-				if(e.getKeyCode() == 87 && py > 0) {
+				if (e.getKeyCode() == 87 && py > 0) {
 					py = py - 5;
 				}
-				if(e.getKeyCode() == 83 && py < 500) {
+				if (e.getKeyCode() == 83 && py < 500) {
 					py = py + 5;
 				}
-				if(e.getKeyCode() == 65 && px > 0) {
+				if (e.getKeyCode() == 65 && px > 0) {
 					px = px - 5;
 				}
-				if(e.getKeyCode() == 68 && px < 500) {
+				if (e.getKeyCode() == 68 && px < 500) {
 					px = px + 5;
 
 				}
 
-				if(vidas == 3) {
+				if (vidas == 3) {
 					imagenes.put("A", cargarImagen("imagenes/pacman.png"));
 					imagenes.put("B", cargarImagen("imagenes/pacman.png"));
 					imagenes.put("C", cargarImagen("imagenes/pacman.png"));
@@ -231,6 +239,7 @@ public class Ventana extends JFrame{
 				}
 
 				colision();
+				score();
 				atajo();
 
 				juego.repaint();
@@ -251,10 +260,10 @@ public class Ventana extends JFrame{
 
 
 		//Se crean los fantasmas y se añaden
-		Fantasma fantasma1 = new Fantasma(180, 180, 20, 20, Color.red, paredes);
-		Fantasma fantasma2 = new Fantasma(180, 190, 20, 20, Color.pink, paredes);
-		Fantasma fantasma3 = new Fantasma(180, 220, 20, 20, Color.cyan, paredes);
-		Fantasma fantasma4 = new Fantasma(180, 200, 20, 20, Color.orange, paredes);
+		Fantasma fantasma1 = new Fantasma(280, 200, 20, 20, Color.red, paredes);
+		Fantasma fantasma2 = new Fantasma(280, 220, 20, 20, Color.pink, paredes);
+		Fantasma fantasma3 = new Fantasma(280, 210, 20, 20, Color.cyan, paredes);
+		Fantasma fantasma4 = new Fantasma(280, 200, 20, 20, Color.orange, paredes);
 
 		fantasmas.add(fantasma1);
 		fantasmas.add(fantasma2);
@@ -283,7 +292,7 @@ public class Ventana extends JFrame{
 
 	}
 
-	public void colision(){
+	public void colision() {
 
 		Rect r = new Rect(px, py, 20, 20, Color.yellow);
 
@@ -312,8 +321,8 @@ public class Ventana extends JFrame{
 		for (Fantasma fantasma : fantasmas) {
 			Rect rectFantasma = new Rect(fantasma.x, fantasma.y, fantasma.w, fantasma.h, fantasma.c);
 			if (r.colision(rectFantasma) || (anteriorPx == fantasma.x && anteriorPy == fantasma.y)) {
-				px = 120;
-				py = 60;
+				px = 275;
+				py = 260;
 				vidas = vidas - 1;
 				revalidate();
 				repaint();
@@ -322,13 +331,14 @@ public class Ventana extends JFrame{
 		}
 	}
 
+
 	public void atajo() {
 
-		System.out.println(px+","+py);
-		if(px == 105 && py == 220) {
+		System.out.println(px + "," + py);
+		if (px == 105 && py == 220) {
 			px = 455;
 			py = 220;
-		}else if(px == 455 && py == 220) {
+		} else if (px == 455 && py == 220) {
 			px = 105;
 			py = 220;
 		}
@@ -336,7 +346,7 @@ public class Ventana extends JFrame{
 
 	public void vidasPacman() {
 
-		if(vidas == 3) {
+		if (vidas == 3) {
 			imagenes.put("A", cargarImagen("imagenes/pacman.png"));
 			imagenes.put("B", cargarImagen("imagenes/pacman.png"));
 			imagenes.put("C", cargarImagen("imagenes/pacman.png"));
@@ -365,6 +375,36 @@ public class Ventana extends JFrame{
 			repaint();
 		}
 	}
+
+	public void aumentarPuntaje() {
+		puntos += 1;
+		etiqueta.setText("SCORE: " + puntos);
+	}
+
+
+	public void score() {
+		boolean[][] visitado = new boolean[26][24];
+		Rect r = new Rect(px, py, 20, 20, Color.yellow);
+
+		for (int i = 0; i < laberinto.length; i++) {
+			for (int j = 0; j < laberinto[0].length; j++) {
+				if (laberinto[i][j].equals("0") && r.colision(new Rect(j * 20, i * 20, 20, 20,Color.black))) {
+
+					if (!visitado[i][j]) {
+						visitado[i][j] = true;
+						laberinto[i][j] = "-";
+						aumentarPuntaje();
+					}
+					break;
+				}
+			}
+		}
+	}
+
+
+
+
+
 
 	class dibujar extends JPanel {
 
@@ -396,10 +436,12 @@ public class Ventana extends JFrame{
 						paredes.add(pared);
 					}
 
-					if(letra.equals("P")) {
-						Rect point = new Rect(j *20,i *20, 20, 20, Colores.colorParedes);
-						punto.add(point);
+					if(letra.equals("0")) {
+						Rect comida = new Rect(j *20,i *20, 20, 20, Colores.colorParedes);
+						comidas.add(comida);
+
 					}
+
 				}
 			}
 
@@ -511,7 +553,7 @@ public class Ventana extends JFrame{
 			}
 
 		}
-		
+
 		public void dibujar(Graphics g) {
 			g.setColor(c);
 			g.fillRect(x, y, 20, 20);
@@ -559,13 +601,13 @@ public class Ventana extends JFrame{
 				Rect r = new Rect(px, py, 20, 20, Color.yellow);
 				Rect rectFantasma = new Rect(x, y, w, h, c);
 				if (r.colision(rectFantasma)) {
-					px = 120;
-					py = 60;
+					px = 275;
+					py = 260;
 					vidas = vidas - 1;
 					vidasPacman();
 					revalidate();
 					repaint();
-					
+
 				}
 			}
 		}

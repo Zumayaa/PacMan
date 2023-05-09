@@ -14,13 +14,13 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 import javax.sound.sampled.*;
+import javax.swing.Timer;
 
 public class Ventana extends JFrame {
 
-	public int px = 275;//Posicion X del persona
-	public int py = 260;
-	long tiempoPastilla;
-	boolean pastillaActiva = true;
+	public int px = 275;//Posicion X del personaje
+	public int py = 260;//Posicion Y del personaje
+	boolean pastillaActiva = false;
 	private sounds reproductor = new sounds();
 
 	int anteriorPx, anteriorPy;
@@ -38,8 +38,6 @@ public class Ventana extends JFrame {
 	private JPanel juego = new JPanel();
 	private HashMap<String, Image> imagenes = new HashMap<String, Image>();
 
-	private boolean juegoIniciado = false;
-
 	int vidas = 3;
 	int verFruta = 1;
 
@@ -47,33 +45,33 @@ public class Ventana extends JFrame {
 	//LO CAMBIE A STRING PORQUE ME DI CUENTA QUE SE OCUPABAN MUCHOS DISEÑOS DE PAREDES :'V
 	private String[][] laberinto = {
 
-			{"E", "E", "E", "E", "E", "a", "2", "2", "2", "2", "2", "2", "2", "2", "7", "2", "2", "2", "2", "2", "2", "2", "2", "b"},
-			{"E", "E", "E", "E", "E", "1", "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", "1"},
-			{"E", "E", "E", "E", "E", "1", "P", "e", "f", "0", "e", "i", "f", "0", "1", "0", "e", "i", "f", "0", "e", "f", "P", "1"},
-			{"E", "E", "E", "E", "E", "1", "0", "g", "h", "0", "g", "j", "h", "0", "u", "0", "g", "j", "h", "0", "g", "h", "0", "1"},
-			{"E", "E", "E", "E", "E", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1"},
-			{"E", "E", "E", "E", "E", "1", "0", "r", "t", "0", "s", "0", "r", "l", "y", "l", "t", "0", "s", "0", "r", "t", "0", "1"},
-			{"E", "E", "E", "E", "E", "1", "0", "0", "0", "0", "k", "0", "0", "0", "k", "0", "0", "0", "k", "0", "0", "0", "0", "1"},
-			{"E", "E", "E", "E", "E", "c", "2", "2", "b", "0", "x", "l", "t", "0", "v", "0", "r", "l", "z", "0", "a", "2", "2", "d"},
-			{"E", "E", "E", "E", "E", "E", "E", "E", "1", "0", "k", "0", "0", "0", "0", "0", "0", "0", "k", "0", "1", "E", "E", "E"},
-			{"E", "E", "E", "E", "E", "E", "E", "E", "1", "0", "k", "0", "a", "4", "E", "3", "b", "0", "k", "0", "1", "E", "E", "E"},
-			{"E", "E", "E", "E", "E", "3", "2", "2", "d", "0", "v", "0", "1", "E", "E", "E", "1", "0", "v", "0", "c", "2", "2", "4"},
-			{"E", "E", "E", "E", "E", "X", "0", "0", "0", "0", "0", "0", "1", "E", "E", "E", "1", "0", "0", "0", "0", "0", "0", "X"},
-			{"E", "E", "E", "E", "E", "3", "2", "2", "b", "0", "s", "0", "c", "2", "2", "2", "d", "0", "s", "0", "a", "2", "2", "4"},
-			{"E", "E", "E", "E", "E", "E", "E", "E", "1", "0", "k", "0", "0", "0", "0", "0", "0", "0", "k", "0", "1", "E", "E", "E"},
-			{"E", "E", "E", "E", "E", "E", "E", "E", "1", "0", "k", "0", "r", "l", "y", "l", "t", "0", "k", "0", "1", "E", "E", "E"},
-			{"E", "E", "E", "E", "E", "a", "2", "2", "d", "0", "v", "0", "0", "0", "k", "0", "0", "0", "v", "0", "c", "2", "2", "b"},
-			{"E", "E", "E", "E", "E", "1", "0", "0", "0", "0", "0", "0", "s", "0", "k", "0", "s", "0", "0", "0", "0", "0", "0", "1"},
-			{"E", "E", "E", "E", "E", "1", "0", "r", "o", "0", "r", "l", "q", "0", "v", "0", "p", "l", "t", "0", "m", "t", "0", "1"},
-			{"E", "E", "E", "E", "E", "1", "P", "0", "k", "0", "0", "0", "0", "0", "F", "0", "0", "0", "0", "0", "k", "0", "P", "1"},
-			{"E", "E", "E", "E", "E", "5", "4", "0", "v", "0", "s", "0", "r", "l", "y", "l", "t", "0", "s", "0", "v", "0", "3", "6"},
-			{"E", "E", "E", "E", "E", "1", "0", "0", "0", "0", "k", "0", "0", "0", "k", "0", "0", "0", "k", "0", "0", "0", "0", "1"},
-			{"E", "E", "E", "E", "E", "1", "0", "r", "l", "l", "w", "l", "t", "0", "v", "0", "r", "l", "w", "l", "l", "t", "0", "1"},
-			{"E", "E", "E", "E", "E", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1"},
-			{"E", "E", "E", "E", "E", "c", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "d"},
+			{"E", "E", "E", "E", "E", 		"a", "2", "2", "2", "2", "2", "2", "2", "2", "7", "2", "2", "2", "2", "2", "2", "2", "2", "b"},
+			{"E", "E", "E", "E", "E", 		"1", "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", "1"},
+			{"E", "E", "E", "E", "E", 		"1", "P", "e", "f", "0", "e", "i", "f", "0", "1", "0", "e", "i", "f", "0", "e", "f", "P", "1"},
+			{"E", "E", "E", "E", "E", 		"1", "0", "g", "h", "0", "g", "j", "h", "0", "u", "0", "g", "j", "h", "0", "g", "h", "0", "1"},
+			{"E", "E", "E", "E", "E", 		"1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1"},
+			{"E", "E", "E", "E", "E",		"1", "0", "r", "t", "0", "s", "0", "r", "l", "y", "l", "t", "0", "s", "0", "r", "t", "0", "1"},
+			{"E", "E", "E", "E", "E", 		"1", "0", "0", "0", "0", "k", "0", "0", "0", "k", "0", "0", "0", "k", "0", "0", "0", "0", "1"},
+			{"E", "E", "E", "E", "E", 		"c", "2", "2", "b", "0", "x", "l", "t", "0", "v", "0", "r", "l", "z", "0", "a", "2", "2", "d"},
+			{"E", "E", "E", "E", "E", 		"E", "E", "E", "1", "0", "k", "0", "0", "0", "0", "0", "0", "0", "k", "0", "1", "E", "E", "E"},
+			{"E", "E", "E", "E", "E", 		"E", "E", "E", "1", "0", "k", "0", "a", "4", "E", "3", "b", "0", "k", "0", "1", "E", "E", "E"},
+			{"E", "E", "E", "E", "E", 		"3", "2", "2", "d", "0", "v", "0", "1", "E", "E", "E", "1", "0", "v", "0", "c", "2", "2", "4"},
+			{"E", "E", "E", "E", "E", 		"X", "0", "0", "0", "0", "0", "0", "1", "E", "E", "E", "1", "0", "0", "0", "0", "0", "0", "X"},
+			{"E", "E", "E", "E", "E", 		"3", "2", "2", "b", "0", "s", "0", "c", "2", "2", "2", "d", "0", "s", "0", "a", "2", "2", "4"},
+			{"E", "E", "E", "E", "E", 		"E", "E", "E", "1", "0", "k", "0", "0", "0", "0", "0", "0", "0", "k", "0", "1", "E", "E", "E"},
+			{"E", "E", "E", "E", "E", 		"E", "E", "E", "1", "0", "k", "0", "r", "l", "y", "l", "t", "0", "k", "0", "1", "E", "E", "E"},
+			{"E", "E", "E", "E", "E", 		"a", "2", "2", "d", "0", "v", "0", "0", "0", "k", "0", "0", "0", "v", "0", "c", "2", "2", "b"},
+			{"E", "E", "E", "E", "E", 		"1", "0", "0", "0", "0", "0", "0", "s", "0", "k", "0", "s", "0", "0", "0", "0", "0", "0", "1"},
+			{"E", "E", "E", "E", "E", 		"1", "0", "r", "o", "0", "r", "l", "q", "0", "v", "0", "p", "l", "t", "0", "m", "t", "0", "1"},
+			{"E", "E", "E", "E", "E", 		"1", "P", "0", "k", "0", "0", "0", "0", "0", "F", "0", "0", "0", "0", "0", "k", "0", "P", "1"},
+			{"E", "E", "E", "E", "E", 		"5", "4", "0", "v", "0", "s", "0", "r", "l", "y", "l", "t", "0", "s", "0", "v", "0", "3", "6"},
+			{"E", "E", "E", "E", "E", 		"1", "0", "0", "0", "0", "k", "0", "0", "0", "k", "0", "0", "0", "k", "0", "0", "0", "0", "1"},
+			{"E", "E", "E", "E", "E", 		"1", "0", "r", "l", "l", "w", "l", "t", "0", "v", "0", "r", "l", "w", "l", "l", "t", "0", "1"},
+			{"E", "E", "E", "E", "E", 		"1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1"},
+			{"E", "E", "E", "E", "E", 		"c", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "d"},
 
-			{"E", "E", "E", "E", "E", "A", "B", "C", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "D", "E", "F", "G"},
-			{"E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E"},
+			{"E", "E", "E", "E", "E", 		"A", "B", "C", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "D", "F", "G"},
+			{"E", "E", "E", "E", "E", 		"E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E"},
 	};
 
 	public Ventana() {
@@ -362,11 +360,19 @@ public class Ventana extends JFrame {
 				px = 275;
 				py = 260;
 				vidas = vidas - 1;
+
+				if (pastillaActiva) {
+					// Cambiar la posición x y y del objeto de la clase Fantasma
+					fantasma.x = 280;
+					fantasma.y = 160;
+				}
+
 				revalidate();
 				repaint();
 				break;
 			}
 		}
+
 	}
 
 
@@ -445,14 +451,14 @@ public class Ventana extends JFrame {
 						repaint();
 
 						// Esperar tiempoPastilla milisegundos
-						try {
-							Thread.sleep(tiempoPastilla);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-
-						pastillaActiva = false;
-						repaint();
+						Timer temporizador = new Timer(5000, new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								pastillaActiva = false;
+								repaint();
+							}
+						});
+						temporizador.setRepeats(false);
+						temporizador.start();
 					}
 					break;
 			}
@@ -518,17 +524,17 @@ public class Ventana extends JFrame {
 							letra.equals("i") || letra.equals("j") || letra.equals("u") || letra.equals("n") || letra.equals("k") || letra.equals("l") || letra.equals("m") || letra.equals("n") ||
 							letra.equals("o") || letra.equals("p") || letra.equals("q") || letra.equals("r") || letra.equals("s") || letra.equals("t") || letra.equals("u") ||
 							letra.equals("v") || letra.equals("w") || letra.equals("x") || letra.equals("y") || letra.equals("z") || letra.equals("V")) {
-						Rect pared = new Rect(j * 20, i * 20, 20, 20, Colores.colorParedes);
+						Rect pared = new Rect(j * 20, i * 20, 20, 20, null);
 						paredes.add(pared);
 					}
 
 					if(letra.equals("0")) {
-						Rect comida = new Rect(j *20,i *20, 20, 20, Colores.colorParedes);
+						Rect comida = new Rect(j *20,i *20, 20, 20, null);
 						comidas.add(comida);
 
 					}
 					if(letra.equals("F")) {
-						Rect frutas = new Rect(j *20,i *20, 20, 20, Colores.colorParedes);
+						Rect frutas = new Rect(j *20,i *20, 20, 20, null);
 						fruta.add(frutas);
 
 					}
@@ -552,8 +558,9 @@ public class Ventana extends JFrame {
 			g.fillRect(r.x, r.y, r.w, r.h);
 			g.drawImage(imagenRect, r.x, r.y, r.w, r.h, null);
 
-			if (pastillaActiva == false) {
+			if (pastillaActiva) {
 				g.drawImage(pastillaEfecto, r.x, r.y, r.w, r.h, null);
+
 			} else {
 				// Dibujar la imagen por defecto
 				g.drawImage(imagenRect, px, py, 20, 20, null);
@@ -568,9 +575,25 @@ public class Ventana extends JFrame {
 
 			//Esto de aqui muestra a los fantasmas y los mueve
 			if (fantasmas != null) {
+
+				Image presa = null;
+				try {
+					presa = ImageIO.read(new File("imagenes/presa.png"));
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+
 				for (Fantasma f : fantasmas) {
 					f.mover();
 					g.drawImage(f.imagen, f.x, f.y, f.w, f.h, null);
+
+					if (pastillaActiva) {
+						g.drawImage(presa, f.x, f.y, f.w, f.h, null);
+
+					} else {
+						// Dibujar la imagen por defecto
+						g.drawImage(f.imagen, f.x, f.y, f.w, f.h, null);
+					}
 				}
 			}
 		}
@@ -585,15 +608,6 @@ public class Ventana extends JFrame {
 			e.printStackTrace();
 		}
 		return imagen;
-	}
-
-	public class Colores {
-		public static Color colorParedes = Color.black;
-
-		public static void cambiarColores() {
-			Random random = new Random();
-			colorParedes = new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256));
-		}
 	}
 
 	public class Rect{

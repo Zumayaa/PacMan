@@ -193,7 +193,7 @@ public class Ventana extends JFrame {
 
 				anteriorPx = px;
 				anteriorPy = py;
-
+				reproductor.reproducir("musica/sirena.wav");
 				if (e.getKeyCode() == 87 && py > 0) {
 					py = py - 5;
 				}
@@ -233,6 +233,7 @@ public class Ventana extends JFrame {
 					imagenes.put("A", cargarImagen("imagenes/nada.png"));
 					imagenes.put("B", cargarImagen("imagenes/nada.png"));
 					imagenes.put("C", cargarImagen("imagenes/nada.png"));
+					reproductor.reproducir("musica/SonidoMuerte.wav");
 					JOptionPane.showMessageDialog(null, "PERDISTESSSS", "GAY", JOptionPane.INFORMATION_MESSAGE);
 
 					revalidate();

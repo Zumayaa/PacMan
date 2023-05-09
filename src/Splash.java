@@ -14,7 +14,6 @@ public class Splash extends JDialog {
 
     private JProgressBar barra;
     private JLabel l2;
-
     public void esperar() {
         try {
 
@@ -319,7 +318,7 @@ public class Splash extends JDialog {
 
         Thread hilo = new Thread(new Runnable() {
             //Cambié el valor porque va demasiado lento
-            int x = 0;
+            int x = 100;
             String texto = " ";
 
             public void run() {
@@ -338,29 +337,37 @@ public class Splash extends JDialog {
                             l2.setText(texto);
                         }
                     }
-
-                    ImageIcon imagen = new ImageIcon("imagenes/pruebaAllegro.png");
-                    // Crea el objeto JLabel
-                    JLabel etiqueta = new JLabel(imagen);
-
-                    etiqueta.setSize(452, 600);
-                    etiqueta.setLocation(0, 0);
-
+                    getContentPane().setBackground(Color.black);
+                    Font font = Font.createFont(Font.TRUETYPE_FONT, new File("fuentes/Minecraft.ttf")).deriveFont(Font.PLAIN, 13);
+                    
+                    JLabel title = new JLabel("");
+                    title.setSize(470, 160);
+                    title.setLocation(-9, 30);
+                    ImageIcon titleIMG = new ImageIcon("imagenes/titulo.png");
+                    Icon iconoTitle = new ImageIcon(titleIMG.getImage().getScaledInstance(title.getWidth(), title.getHeight(), Image.SCALE_DEFAULT));
+                    title.setIcon(iconoTitle);
+                    
+                    JLabel develop = new JLabel("Developed by Andrea, Luis & Abraham");
+                    develop.setSize(350, 160);
+                    develop.setLocation(115, 470);
+                    develop.setForeground(Color.WHITE);
+                    develop.setFont(font);
+                    
                     ParpadeoBoton play = new ParpadeoBoton("PLAY     >");
                     play.setFont(new Font("Tahoma", Font.PLAIN, 18));
-                    play.setBounds(240, 420, 140, 25);
+                    play.setBounds(130, 300, 200, 30);
 
                     ParpadeoBoton instrucciones = new ParpadeoBoton("INSTRUCTIONS");
                     instrucciones.setFont(new Font("Tahoma", Font.PLAIN, 18));
-                    instrucciones.setBounds(240, 455, 140, 25);
+                    instrucciones.setBounds(130, 345, 200, 30);
 
                     ParpadeoBoton equipo = new ParpadeoBoton("CONTROLS");
                     equipo.setFont(new Font("Tahoma", Font.PLAIN, 18));
-                    equipo.setBounds(240, 490, 140, 25);
+                    equipo.setBounds(130, 390, 200, 30);
 
                     ParpadeoBoton salir = new ParpadeoBoton("EXIT GAME");
                     salir.setFont(new Font("Tahoma", Font.PLAIN, 18));
-                    salir.setBounds(240, 525, 140, 25);
+                    salir.setBounds(130, 435, 200, 30);
 
                     getContentPane().removeAll();
 
@@ -369,8 +376,8 @@ public class Splash extends JDialog {
                     getContentPane().add(instrucciones);
                     getContentPane().add(equipo);
                     getContentPane().add(salir);
-
-                    getContentPane().add(etiqueta);
+                    getContentPane().add(title);
+                    getContentPane().add(develop);
 
                     revalidate();
                     repaint();

@@ -121,10 +121,6 @@ public class Splash extends JDialog {
             evadeTitle.setBounds(50, 50, 300, 300);
             add(evadeTitle);
 
-            //MUSICA SE REPRODUCE
-            reproductor.reproducir("musica/music.wav");
-            //reproductor.detener();
-
             JLabel point1 = new JLabel("");
             point1.setSize(20, 20);
             point1.setLocation(20, 190);
@@ -223,7 +219,6 @@ public class Splash extends JDialog {
             atras.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     dispose(); // cerrar la ventana actual
-                    reproductor.detener();
                 }
             });
 

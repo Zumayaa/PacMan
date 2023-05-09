@@ -346,7 +346,7 @@ public class Splash extends JDialog {
 
         Thread hilo = new Thread(new Runnable() {
             //Cambié el valor porque va demasiado lento
-            int x = 100;
+            int x = 0;
             String texto = " ";
 
             public void run() {

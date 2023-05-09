@@ -193,7 +193,6 @@ public class Ventana extends JFrame {
 
 				anteriorPx = px;
 				anteriorPy = py;
-				reproductor.reproducir("musica/sirena.wav");
 				if (e.getKeyCode() == 87 && py > 0) {
 					py = py - 5;
 				}

@@ -58,7 +58,7 @@ public class Ventana extends JFrame {
 			{"E", "E", "E", "E", "E", 		"1", "0", "0", "0", "0", "k", "0", "0", "0", "k", "0", "0", "0", "k", "0", "0", "0", "0", "1"},
 			{"E", "E", "E", "E", "E", 		"c", "2", "2", "b", "0", "x", "l", "t", "0", "v", "0", "r", "l", "z", "0", "a", "2", "2", "d"},
 			{"E", "E", "E", "E", "E", 		"E", "E", "E", "1", "0", "k", "0", "0", "0", "0", "0", "0", "0", "k", "0", "1", "E", "E", "E"},
-			{"E", "E", "E", "E", "E", 		"E", "E", "E", "1", "0", "k", "0", "a", "4", "E", "3", "b", "0", "k", "0", "1", "E", "E", "E"},
+			{"E", "E", "E", "E", "E", 		"E", "E", "E", "1", "0", "k", "0", "a", "E", "E", "E", "b", "0", "k", "0", "1", "E", "E", "E"},
 			{"E", "E", "E", "E", "E", 		"3", "2", "2", "d", "0", "v", "0", "1", "E", "E", "E", "1", "0", "v", "0", "c", "2", "2", "4"},
 			{"E", "E", "E", "E", "E", 		"X", "0", "0", "0", "0", "0", "0", "1", "E", "E", "E", "1", "0", "0", "0", "0", "0", "0", "X"},
 			{"E", "E", "E", "E", "E", 		"3", "2", "2", "b", "0", "s", "0", "c", "2", "2", "2", "d", "0", "s", "0", "a", "2", "2", "4"},
@@ -83,6 +83,7 @@ public class Ventana extends JFrame {
 		try {
 			imagenRect = ImageIO.read(new File("imagenes/pacman.png"));
 			cuadros = new BufferedImage[5];
+
 			for (int i = 0; i < 5; i++) { // 5 es el número de cuadros en la imagen
 				cuadros[i] = imagenRect.getSubimage(i * 20, 0, 20, 20);
 			}
@@ -160,6 +161,8 @@ public class Ventana extends JFrame {
 		panelSuperior.setLayout(new GridBagLayout());
 
 		JButton boton = new JButton("Salir");
+		boton.setBackground(Color.BLACK);
+		boton.setForeground(Color.WHITE);
 		boton.setPreferredSize(new Dimension(70, 20));
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
@@ -176,7 +179,11 @@ public class Ventana extends JFrame {
 		});
 
 		etiqueta = new JLabel("SCORE: ");
-		etiqueta.setPreferredSize(new Dimension(100, 20));
+		etiqueta.setFont(new Font("score", Font.PLAIN, 20));
+		etiqueta.setBackground(Color.BLACK);
+		etiqueta.setForeground(Color.WHITE);
+
+		etiqueta.setPreferredSize(new Dimension(200, 50));
 		gbc = new GridBagConstraints();
 		gbc.gridx = 1;
 		gbc.gridy = 0;
@@ -187,7 +194,6 @@ public class Ventana extends JFrame {
 		this.add(panelSuperior, BorderLayout.NORTH);
 
 		juego = new JPanel(new BorderLayout());
-		//juego.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		juego.setOpaque(true);
 		juego.setBackground(Color.decode("#eeeeee"));
 		juego.add(panel, BorderLayout.CENTER);
@@ -380,14 +386,16 @@ public class Ventana extends JFrame {
 		for (Fantasma fantasma : fantasmas) {
 			Rect rectFantasma = new Rect(fantasma.x, fantasma.y, fantasma.w, fantasma.h, fantasma.c);
 			if (r.colision(rectFantasma) || (anteriorPx == fantasma.x && anteriorPy == fantasma.y)) {
-				px = 275;
-				py = 260;
-				vidas = vidas - 1;
 
 				if (pastillaActiva) {
 					// Cambiar la posición x y y del objeto de la clase Fantasma
 					fantasma.x = 280;
 					fantasma.y = 160;
+
+				} else {
+					px = 275;
+					py = 260;
+					vidas = vidas - 1;
 				}
 
 				revalidate();
@@ -440,6 +448,13 @@ public class Ventana extends JFrame {
 			imagenes.put("C", cargarImagen("imagenes/nada.png"));
 			revalidate();
 			repaint();
+			reproductor.reproducir("musica/SonidoMuerte.wav");
+			JOptionPane.showMessageDialog(null, "USTED ES UN PERDEDOR...", "PACMAN", JOptionPane.INFORMATION_MESSAGE);
+
+			revalidate();
+			repaint();
+
+			System.exit(0);
 		}
 	}
 

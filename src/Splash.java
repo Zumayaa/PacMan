@@ -349,9 +349,29 @@ public class Splash extends JDialog {
                     
                     JLabel develop = new JLabel("Developed by Andrea, Luis & Abraham");
                     develop.setSize(350, 160);
-                    develop.setLocation(115, 470);
+                    develop.setLocation(115, 450);
                     develop.setForeground(Color.WHITE);
                     develop.setFont(font);
+                    
+                    JLabel rights = new JLabel("© 1980 1990 UABCS.");
+                    rights.setSize(350, 160);
+                    rights.setLocation(167, 470);
+                    rights.setForeground(Color.yellow);
+                    rights.setFont(font);
+                    
+                    JLabel rights2 = new JLabel("All rights deserved");
+                    rights2.setSize(350, 160);
+                    rights2.setLocation(176, 490);
+                    rights2.setForeground(Color.yellow);
+                    rights2.setFont(font);
+                    
+                    JLabel evadeDescription = new JLabel("");
+                    evadeDescription.setSize(150, 140);
+                    evadeDescription.setLocation(150, 145);
+                    ImageIcon gif = new ImageIcon("imagenes/pacman-menu.png");
+                    Icon icono = new ImageIcon(gif.getImage().getScaledInstance(evadeDescription.getWidth(), evadeDescription.getHeight(), Image.SCALE_DEFAULT));
+                    evadeDescription.setIcon(icono);
+                    
                     
                     ParpadeoBoton play = new ParpadeoBoton("PLAY     >");
                     play.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -378,6 +398,9 @@ public class Splash extends JDialog {
                     getContentPane().add(salir);
                     getContentPane().add(title);
                     getContentPane().add(develop);
+                    getContentPane().add(rights);
+                    getContentPane().add(rights2);
+                    getContentPane().add(evadeDescription);
 
                     revalidate();
                     repaint();

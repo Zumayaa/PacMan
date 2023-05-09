@@ -414,6 +414,7 @@ public class Splash extends JDialog {
                             dispose();
                             v1.setVisible(true);
                             v1.setLocationRelativeTo(null);
+                            reproductor.detener();
                             esperar();
                         }
                     });

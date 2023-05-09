@@ -297,24 +297,30 @@ public class Ventana extends JFrame {
 
 	}
 	
-    public class sounds {
-        private Clip clip;
+	public class sounds {
+	    private Clip clip;
 
-        public void reproducir(String rutaArchivo) {
-            try {
-                clip = AudioSystem.getClip();
-                AudioInputStream inputStream = AudioSystem.getAudioInputStream(new File(rutaArchivo));
-                clip.open(inputStream);
-                clip.loop(Clip.LOOP_CONTINUOUSLY);
-            } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
-                e.printStackTrace();
-            }
-        }
+	    public void reproducir(String rutaArchivo) {
+	        try {
+	            if (clip != null && clip.isRunning()) {
+	                clip.stop();
+	            }
+	            clip = AudioSystem.getClip();
+	            AudioInputStream inputStream = AudioSystem.getAudioInputStream(new File(rutaArchivo));
+	            clip.open(inputStream);
+	            clip.setFramePosition(0);
+	            clip.start();
+	        } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
+	            e.printStackTrace();
+	        }
+	    }
 
-        public void detener() {
-            clip.stop();
-        }
-    }
+	    public void detener() {
+	        if (clip != null) {
+	            clip.stop();
+	        }
+	    }
+	}
 
 	public void colision() {
 
@@ -418,7 +424,7 @@ public class Ventana extends JFrame {
 					if (!visitado[i][j]) {
 						visitado[i][j] = true;
 						laberinto[i][j] = "-";
-						//reproductor.reproducir("musica/pacmanComiendo.wav");
+						reproductor.reproducir("musica/pacmanComiendo.wav");
 						aumentarPuntaje();
 					}
 					break;

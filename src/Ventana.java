@@ -1,6 +1,8 @@
 import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioInputStream;
 import javax.swing.*;
+
+
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,6 +21,7 @@ public class Ventana extends JFrame {
 	public int py = 260;
 	long tiempoPastilla;
 	boolean pastillaActiva = true;
+	private sounds reproductor = new sounds();
 
 	int anteriorPx, anteriorPy;
 
@@ -293,6 +296,25 @@ public class Ventana extends JFrame {
 		}
 
 	}
+	
+    public class sounds {
+        private Clip clip;
+
+        public void reproducir(String rutaArchivo) {
+            try {
+                clip = AudioSystem.getClip();
+                AudioInputStream inputStream = AudioSystem.getAudioInputStream(new File(rutaArchivo));
+                clip.open(inputStream);
+                clip.loop(Clip.LOOP_CONTINUOUSLY);
+            } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public void detener() {
+            clip.stop();
+        }
+    }
 
 	public void colision() {
 
@@ -396,6 +418,7 @@ public class Ventana extends JFrame {
 					if (!visitado[i][j]) {
 						visitado[i][j] = true;
 						laberinto[i][j] = "-";
+						//reproductor.reproducir("musica/pacmanComiendo.wav");
 						aumentarPuntaje();
 					}
 					break;

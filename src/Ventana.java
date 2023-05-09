@@ -41,6 +41,10 @@ public class Ventana extends JFrame {
 	int vidas = 3;
 	int verFruta = 1;
 
+	private BufferedImage imagenRect;
+	private BufferedImage[] cuadros;
+	private int indiceCuadro;
+
 
 	//LO CAMBIE A STRING PORQUE ME DI CUENTA QUE SE OCUPABAN MUCHOS DISEÑOS DE PAREDES :'V
 	private String[][] laberinto = {
@@ -76,7 +80,20 @@ public class Ventana extends JFrame {
 
 	public Ventana() {
 
-		pacman = new ImageIcon("imagenes/pacman.png").getImage();
+		try {
+			imagenRect = ImageIO.read(new File("imagenes/pacman.png"));
+			cuadros = new BufferedImage[5];
+			for (int i = 0; i < 5; i++) { // 5 es el número de cuadros en la imagen
+				cuadros[i] = imagenRect.getSubimage(i * 20, 0, 20, 20);
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		indiceCuadro = 0;
+
+		pacman = new ImageIcon("imagenes/pacmanV.png").getImage();
 
 		imagenes.put("1", cargarImagen("imagenes/paredParada1.png"));
 		imagenes.put("2", cargarImagen("imagenes/paredAcostada1.png"));
@@ -128,6 +145,7 @@ public class Ventana extends JFrame {
 		imagenes.put("P", cargarImagen("imagenes/pastilla.png"));
 
 
+
 		//PROPIEDADES VENTANA
 		this.setTitle("Pacman");
 		this.setSize(600, 600);
@@ -137,6 +155,7 @@ public class Ventana extends JFrame {
 		this.setVisible(true);
 
 		JPanel panelSuperior = new JPanel();
+		panelSuperior.setBackground(Color.BLACK);
 		panelSuperior.setPreferredSize(new Dimension(getWidth(), 50));
 		panelSuperior.setLayout(new GridBagLayout());
 
@@ -195,15 +214,19 @@ public class Ventana extends JFrame {
 				anteriorPy = py;
 				if (e.getKeyCode() == 87 && py > 0) {
 					py = py - 5;
+					indiceCuadro = 2;
 				}
 				if (e.getKeyCode() == 83 && py < 500) {
 					py = py + 5;
+					indiceCuadro = 3;
 				}
 				if (e.getKeyCode() == 65 && px > 0) {
 					px = px - 5;
+					indiceCuadro = 0;
 				}
 				if (e.getKeyCode() == 68 && px < 500) {
 					px = px + 5;
+					indiceCuadro = 1;
 
 				}
 				
@@ -215,21 +238,21 @@ public class Ventana extends JFrame {
 				}
 
 				if (vidas == 3) {
-					imagenes.put("A", cargarImagen("imagenes/pacman.png"));
-					imagenes.put("B", cargarImagen("imagenes/pacman.png"));
-					imagenes.put("C", cargarImagen("imagenes/pacman.png"));
+					imagenes.put("A", cargarImagen("imagenes/pacmanV.png"));
+					imagenes.put("B", cargarImagen("imagenes/pacmanV.png"));
+					imagenes.put("C", cargarImagen("imagenes/pacmanV.png"));
 					revalidate();
 					repaint();
 
 				} else if (vidas == 2) {
-					imagenes.put("A", cargarImagen("imagenes/pacman.png"));
-					imagenes.put("B", cargarImagen("imagenes/pacman.png"));
+					imagenes.put("A", cargarImagen("imagenes/pacmanV.png"));
+					imagenes.put("B", cargarImagen("imagenes/pacmanV.png"));
 					imagenes.put("C", cargarImagen("imagenes/nada.png"));
 					revalidate();
 					repaint();
 
 				} else if (vidas == 1) {
-					imagenes.put("A", cargarImagen("imagenes/pacman.png"));
+					imagenes.put("A", cargarImagen("imagenes/pacmanV.png"));
 					imagenes.put("B", cargarImagen("imagenes/nada.png"));
 					imagenes.put("C", cargarImagen("imagenes/nada.png"));
 					revalidate();
@@ -240,7 +263,7 @@ public class Ventana extends JFrame {
 					imagenes.put("B", cargarImagen("imagenes/nada.png"));
 					imagenes.put("C", cargarImagen("imagenes/nada.png"));
 					reproductor.reproducir("musica/SonidoMuerte.wav");
-					JOptionPane.showMessageDialog(null, "PERDISTESSSS", "GAY", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "USTED ES UN PERDEDOR...", "PACMAN", JOptionPane.INFORMATION_MESSAGE);
 
 					revalidate();
 					repaint();
@@ -556,21 +579,7 @@ public class Ventana extends JFrame {
 			Rect r = new Rect(px, py, 20, 20, null);
 			g.setColor(r.c);
 			g.fillRect(r.x, r.y, r.w, r.h);
-			g.drawImage(imagenRect, r.x, r.y, r.w, r.h, null);
-
-			if (pastillaActiva) {
-				g.drawImage(pastillaEfecto, r.x, r.y, r.w, r.h, null);
-
-			} else {
-				// Dibujar la imagen por defecto
-				g.drawImage(imagenRect, px, py, 20, 20, null);
-			}
-
-			//COMIDA
-	        /*for (Rect c : comida) {
-	            g.setColor(c.c);
-	            g.fillRect(c.x, c.y, c.w, c.h);
-	        }*/
+			g.drawImage(cuadros[indiceCuadro], r.x, r.y, r.w, r.h, null);
 
 
 			//Esto de aqui muestra a los fantasmas y los mueve

@@ -41,6 +41,7 @@ public class Ventana extends JFrame {
 	private boolean juegoIniciado = false;
 
 	int vidas = 3;
+	int verFruta = 1;
 
 
 	//LO CAMBIE A STRING PORQUE ME DI CUENTA QUE SE OCUPABAN MUCHOS DISEÑOS DE PAREDES :'V
@@ -205,6 +206,13 @@ public class Ventana extends JFrame {
 				}
 				if (e.getKeyCode() == 68 && px < 500) {
 					px = px + 5;
+
+				}
+				
+				if (verFruta == 0) {
+					imagenes.put("F", cargarImagen("imagenes/nada.png"));
+					revalidate();
+					repaint();
 
 				}
 
@@ -457,6 +465,7 @@ public class Ventana extends JFrame {
 						visitado[i][j] = true;
 						laberinto[i][j] = "-";
 						puntos = puntos + 100;
+						verFruta = 0;
 						repaint();
 					}
 					break;

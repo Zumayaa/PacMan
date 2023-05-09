@@ -25,16 +25,16 @@ public class Ventana extends JFrame {
 
 	int anteriorPx, anteriorPy;
 
-	JLabel etiqueta;
+	private JLabel etiqueta;
 	private Image pacman;
-	ArrayList<Rect> paredes = new ArrayList<Rect>();
-	ArrayList<Rect> comidas = new ArrayList<>();
-	ArrayList<Fantasma> fantasmas = new ArrayList<Fantasma>();
+	private ArrayList<Rect> paredes = new ArrayList<Rect>();
+	private ArrayList<Rect> comidas = new ArrayList<>();
+	private ArrayList<Fantasma> fantasmas = new ArrayList<Fantasma>();
 
 	public int puntos = 0;
-	ArrayList<Rect> punto = new ArrayList<Rect>();
-	JPanel panel = new JPanel();
-	JPanel juego = new JPanel();
+	private ArrayList<Rect> punto = new ArrayList<Rect>();
+	private JPanel panel = new JPanel();
+	private JPanel juego = new JPanel();
 	private HashMap<String, Image> imagenes = new HashMap<String, Image>();
 
 	private boolean juegoIniciado = false;
@@ -176,7 +176,6 @@ public class Ventana extends JFrame {
 		juego.add(new dibujar());
 
 		this.add(juego, BorderLayout.CENTER);
-
 		this.repaint();
 		this.revalidate();
 
@@ -473,7 +472,6 @@ public class Ventana extends JFrame {
 	class dibujar extends JPanel {
 
 		public void paintComponent(Graphics g) {
-
 			super.paintComponent(g);
 
 			setBackground(Color.BLACK);

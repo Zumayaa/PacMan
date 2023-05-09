@@ -4,6 +4,8 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
+
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +14,7 @@ import java.io.IOException;
 
 public class Splash extends JDialog {
 	private ReproductorMusica reproductor = new ReproductorMusica();
+	private sounds sonidos = new sounds();
     private JProgressBar barra;
     private JLabel l2;
     public void esperar() {
@@ -248,6 +251,31 @@ public class Splash extends JDialog {
             clip.stop();
         }
     }
+    //clase para sonidos iniciales
+	public class sounds {
+	    private Clip clip;
+
+	    public void reproducir(String rutaArchivo) {
+	        try {
+	            if (clip != null && clip.isRunning()) {
+	                clip.stop();
+	            }
+	            clip = AudioSystem.getClip();
+	            AudioInputStream inputStream = AudioSystem.getAudioInputStream(new File(rutaArchivo));
+	            clip.open(inputStream);
+	            clip.setFramePosition(0);
+	            clip.start();
+	        } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    public void detener() {
+	        if (clip != null) {
+	            clip.stop();
+	        }
+	    }
+	}
 
     public class InformacionVentana extends JFrame {
 
@@ -415,6 +443,7 @@ public class Splash extends JDialog {
                             v1.setVisible(true);
                             v1.setLocationRelativeTo(null);
                             reproductor.detener();
+                            sonidos.reproducir("musica/SonidoInicio.wav");
                             esperar();
                         }
                     });

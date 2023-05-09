@@ -11,7 +11,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class Splash extends JDialog {
-
+	private ReproductorMusica reproductor = new ReproductorMusica();
     private JProgressBar barra;
     private JLabel l2;
     public void esperar() {
@@ -119,7 +119,6 @@ public class Splash extends JDialog {
             add(evadeTitle);
 
             //MUSICA SE REPRODUCE
-            ReproductorMusica reproductor = new ReproductorMusica();
             reproductor.reproducir("musica/music.wav");
             //reproductor.detener();
 
@@ -221,6 +220,7 @@ public class Splash extends JDialog {
             atras.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     dispose(); // cerrar la ventana actual
+                    reproductor.detener();
                 }
             });
 
@@ -391,7 +391,8 @@ public class Splash extends JDialog {
 
                     getContentPane().removeAll();
 
-
+                    
+                    reproductor.reproducir("musica/music.wav");
                     getContentPane().add(play);
                     getContentPane().add(instrucciones);
                     getContentPane().add(equipo);

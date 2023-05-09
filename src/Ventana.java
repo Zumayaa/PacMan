@@ -29,6 +29,7 @@ public class Ventana extends JFrame {
 	private Image pacman;
 	private ArrayList<Rect> paredes = new ArrayList<Rect>();
 	private ArrayList<Rect> comidas = new ArrayList<>();
+	ArrayList<Rect> fruta = new ArrayList<>();
 	private ArrayList<Fantasma> fantasmas = new ArrayList<Fantasma>();
 
 	public int puntos = 0;
@@ -63,7 +64,7 @@ public class Ventana extends JFrame {
 			{"E", "E", "E", "E", "E", "a", "2", "2", "d", "0", "v", "0", "0", "0", "k", "0", "0", "0", "v", "0", "c", "2", "2", "b"},
 			{"E", "E", "E", "E", "E", "1", "0", "0", "0", "0", "0", "0", "s", "0", "k", "0", "s", "0", "0", "0", "0", "0", "0", "1"},
 			{"E", "E", "E", "E", "E", "1", "0", "r", "o", "0", "r", "l", "q", "0", "v", "0", "p", "l", "t", "0", "m", "t", "0", "1"},
-			{"E", "E", "E", "E", "E", "1", "P", "0", "k", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "k", "0", "P", "1"},
+			{"E", "E", "E", "E", "E", "1", "P", "0", "k", "0", "0", "0", "0", "0", "F", "0", "0", "0", "0", "0", "k", "0", "P", "1"},
 			{"E", "E", "E", "E", "E", "5", "4", "0", "v", "0", "s", "0", "r", "l", "y", "l", "t", "0", "s", "0", "v", "0", "3", "6"},
 			{"E", "E", "E", "E", "E", "1", "0", "0", "0", "0", "k", "0", "0", "0", "k", "0", "0", "0", "k", "0", "0", "0", "0", "1"},
 			{"E", "E", "E", "E", "E", "1", "0", "r", "l", "l", "w", "l", "t", "0", "v", "0", "r", "l", "w", "l", "l", "t", "0", "1"},
@@ -449,6 +450,20 @@ public class Ventana extends JFrame {
 			}
 		}}
 
+		for (int i = 0; i < laberinto.length; i++) {
+			for (int j = 0; j < laberinto[0].length; j++) {
+				if (laberinto[i][j].equals("F") && r.colision(new Rect(j * 20, i * 20, 20, 20,Color.black))) {
+					if (!visitado[i][j]) {
+						visitado[i][j] = true;
+						laberinto[i][j] = "-";
+						puntos = puntos + 100;
+						repaint();
+					}
+					break;
+				}
+			}
+		}
+		
 		boolean quedaAlgun0 = false;
 		for (int i = 0; i < laberinto.length; i++) {
 			for (int j = 0; j < laberinto[0].length; j++) {
@@ -493,7 +508,7 @@ public class Ventana extends JFrame {
 							letra.equals("a") || letra.equals("b") || letra.equals("c") || letra.equals("d") || letra.equals("e") || letra.equals("f") || letra.equals("g") || letra.equals("h") ||
 							letra.equals("i") || letra.equals("j") || letra.equals("u") || letra.equals("n") || letra.equals("k") || letra.equals("l") || letra.equals("m") || letra.equals("n") ||
 							letra.equals("o") || letra.equals("p") || letra.equals("q") || letra.equals("r") || letra.equals("s") || letra.equals("t") || letra.equals("u") ||
-							letra.equals("v") || letra.equals("w") || letra.equals("x") || letra.equals("y") || letra.equals("z") || letra.equals("V") || letra.equals("F")) {
+							letra.equals("v") || letra.equals("w") || letra.equals("x") || letra.equals("y") || letra.equals("z") || letra.equals("V")) {
 						Rect pared = new Rect(j * 20, i * 20, 20, 20, Colores.colorParedes);
 						paredes.add(pared);
 					}
@@ -501,6 +516,11 @@ public class Ventana extends JFrame {
 					if(letra.equals("0")) {
 						Rect comida = new Rect(j *20,i *20, 20, 20, Colores.colorParedes);
 						comidas.add(comida);
+
+					}
+					if(letra.equals("F")) {
+						Rect frutas = new Rect(j *20,i *20, 20, 20, Colores.colorParedes);
+						fruta.add(frutas);
 
 					}
 
